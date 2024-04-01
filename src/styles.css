@@ -45,4 +45,18 @@ body {
   .btn:hover {
     background-color: #0056b3;
   }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 200px; /* adjust as needed */
+    overflow-y: auto; /* add a scrollbar if necessary */
+  }
+  .user-details {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 10px; /* adjust as needed */
+  }
   
