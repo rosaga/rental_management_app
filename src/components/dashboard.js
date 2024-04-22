@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Navigation from './navigation';
 import { Link, useLocation } from 'react-router-dom';
+
 
 const Dashboard = () => {
   // Dummy data for the dashboard
@@ -11,6 +12,11 @@ const Dashboard = () => {
     tenants: 25,
     totalHouses: 50,
     apartments: 15
+  };
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
   };
   const location = useLocation();
   const user = location.state;
@@ -36,8 +42,6 @@ const Dashboard = () => {
     }]
   };
 
-  console.log('Dashboard component rendered', user.user.username);
-
   return (
     <div className="container">
       <div className="row">
@@ -50,7 +54,7 @@ const Dashboard = () => {
           <Navigation />
         </div>
       </div>
-      <div className="user-details">
+      <div className={`user-details ${isCollapsed ? 'collapsed' : ''}`} onClick={toggleCollapse}>
         <p>Logged in as: {user.user.username} </p>
         <Link to="/logout">Logout</Link>
       </div>

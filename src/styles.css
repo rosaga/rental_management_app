@@ -59,4 +59,10 @@ body {
     top: 0;
     padding: 10px; /* adjust as needed */
   }
+  .dashboard-content {
+    flex: 100;
+    margin: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
   
