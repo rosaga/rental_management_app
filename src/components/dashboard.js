@@ -1,64 +1,109 @@
-import React, { useState } from 'react';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import Navigation from './navigation';
-import { Link, useLocation } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Typography, Box, Grid, Button, Paper, CircularProgress } from '@mui/material';
+import { Home, People, Receipt, Payment } from '@mui/icons-material';
 
 const Dashboard = () => {
-  // Dummy data for the dashboard
-  const dummyDashboardData = {
-    occupiedHouses: 10,
-    tenants: 25,
-    totalHouses: 50,
-    apartments: 15
-  };
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [dashboardData, setDashboardData] = useState({
+    houses: 0,
+    tenants: 0,
+    invoices: 0,
+    payments: 0,
+    rentCollected: 0,
+    tenantBalances: 0,
+    unpaidInvoices: 0,
+  });
 
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-  const location = useLocation();
-  const user = location.state;
-  // Define chart options
-  const chartOptions = {
-    chart: {
-      type: 'column'
-    },
-    title: {
-      text: 'Dashboard'
-    },
-    xAxis: {
-      categories: ['Occupied Houses', 'Tenants', 'Total Houses', 'Apartments']
-    },
-    yAxis: {
-      title: {
-        text: 'Number'
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5001/api/dashboard');
+        setDashboardData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setLoading(false);
       }
-    },
-    series: [{
-      name: 'Data',
-      data: [dummyDashboardData.occupiedHouses, dummyDashboardData.tenants, dummyDashboardData.totalHouses, dummyDashboardData.apartments]
-    }]
-  };
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-9">
-          <div className="dashboard-content">
-            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-          </div>
-        </div>
-        <div className="col-md-3">
-          <Navigation />
-        </div>
-      </div>
-      <div className={`user-details ${isCollapsed ? 'collapsed' : ''}`} onClick={toggleCollapse}>
-        <p>Logged in as: {user.user.username} </p>
-        <Link to="/logout">Logout</Link>
-      </div>
-    </div>
+    <Box sx={{ padding: '20px' }}>
+      <Typography variant="h4" gutterBottom>Hello</Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Home fontSize="large" />
+            <Typography variant="h6">Houses</Typography>
+            <Typography variant="h4">{dashboardData.houses}</Typography>
+            <Button component={Link} to="/houses" variant="outlined" color="primary">View details</Button>
+            <Button component={Link} to="/createNewHouse" variant="outlined" color="primary">Add</Button>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <People fontSize="large" />
+            <Typography variant="h6">Tenants</Typography>
+            <Typography variant="h4">{dashboardData.tenants}</Typography>
+            <Button component={Link} to="/tenants" variant="outlined" color="primary">View details</Button>
+            <Button component={Link} to="/createNewTenant" variant="outlined" color="primary">Add</Button>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Receipt fontSize="large" />
+            <Typography variant="h6">Invoices</Typography>
+            <Typography variant="h4">{dashboardData.invoices}</Typography>
+            <Button component={Link} to="/invoices" variant="outlined" color="primary">View details</Button>
+            <Button component={Link} to="/createNewInvoice" variant="outlined" color="primary">Add</Button>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Payment fontSize="large" />
+            <Typography variant="h6">Payments</Typography>
+            <Typography variant="h4">{dashboardData.payments}</Typography>
+            <Button component={Link} to="/rent-payments" variant="outlined" color="primary">View details</Button>
+            <Button component={Link} to="/createNewPayment" variant="outlined" color="primary">Add</Button>
+          </Paper>
+        </Grid>
+      </Grid>
+      <Grid container spacing={3} sx={{ marginTop: '20px' }}>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Typography variant="h6">Month Collections</Typography>
+            <Typography variant="h4">{dashboardData.rentCollected}</Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Typography variant="h6">Pending Invoices</Typography>
+            <Typography variant="h4">{dashboardData.unpaidInvoices}</Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Typography variant="h6">Tenant Balances</Typography>
+            <Typography variant="h4">{dashboardData.tenantBalances}</Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
+            <Typography variant="h6">Rentable Units</Typography>
+            <Typography variant="h4">{dashboardData.houses}</Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -1,6 +1,7 @@
+// controllers/housesController.js
 const db = require('../db');
 
-// Create a new house
+// Create a house
 const createHouse = async (houseData) => {
   try {
     const newHouse = await db('houses').insert(houseData).returning('*');
@@ -20,20 +21,20 @@ const getAllHouses = async () => {
   }
 };
 
-// Get house by ID
+// Get a house by ID
 const getHouseById = async (id) => {
   try {
-    const house = await db('houses').where({ id }).first();
+    const house = await db('houses').where({ houseID: id }).first();
     return house;
   } catch (error) {
     throw error;
   }
 };
 
-// Update house
+// Update a house
 const updateHouse = async (id, updatedData) => {
   try {
-    await db('houses').where({ id }).update(updatedData);
+    await db('houses').where({ houseID: id }).update(updatedData);
     const updatedHouse = await getHouseById(id);
     return updatedHouse;
   } catch (error) {
@@ -41,11 +42,11 @@ const updateHouse = async (id, updatedData) => {
   }
 };
 
-// Delete house
+// Delete a house
 const deleteHouse = async (id) => {
   try {
     const deletedHouse = await getHouseById(id);
-    await db('houses').where({ id }).del();
+    await db('houses').where({ houseID: id }).del();
     return deletedHouse;
   } catch (error) {
     throw error;

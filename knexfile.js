@@ -1,19 +1,21 @@
 module.exports = {
-    development: {
-      client: 'pg',
-      connection: {
-        host: 'localhost',
-        user: 'postgres',
-        password: '@Microsoft2010',
-        database: 'rental',
-        port: 5432
-      },
-      migrations: {
-        directory: './server/migrations'
-      },
-      seeds: {
-        directory: './server/seeds'
+  development: {
+    client: 'mssql',
+    connection: {
+      server: 'localhost',
+      user: 'sa',
+      password: '12345678',
+      database: 'rental',
+      port: 1433,
+      options: {
+        enableArithAbort: true
       }
+    },
+    migrations: {
+      directory: './server/migrations'
+    },
+    seeds: {
+      directory: './server/seeds'
     }
-  };
-  
+  }
+};
