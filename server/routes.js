@@ -25,6 +25,17 @@ router.get('/dashboard', async (req, res) => {
     const payments = await db('payments').count('paymentID as count').first();
     const rentCollected = await db('payments').sum('amountPaid as total').first();
     const tenantBalances = await db('tenants').sum('account as total').first();
+
+    const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-11
+    const currentYear = new Date().getFullYear();
+
+    const currentMonthRentCollected = await db('payments')
+      .join('periods', 'payments.periodID', 'periods.periodID')
+      .where('periods.month', currentMonth)
+      .andWhere('periods.year', currentYear)
+      .sum('amountPaid as total')
+      .first();
+
     const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
 
     res.json({
@@ -32,14 +43,17 @@ router.get('/dashboard', async (req, res) => {
       tenants: tenants.count,
       invoices: invoices.count,
       payments: payments.count,
-      rentCollected: rentCollected.total,
+      rentCollected: currentMonthRentCollected.total || 0,
       tenantBalances: tenantBalances.total,
       unpaidInvoices: unpaidInvoices.count,
     });
   } catch (error) {
+    console.error('Error fetching dashboard data:', error);
     res.status(500).json({ error: 'Failed to fetch dashboard data' });
   }
 });
+
+
 
 
 // Create User

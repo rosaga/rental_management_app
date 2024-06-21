@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Typography, Box, Grid, Button, Paper, CircularProgress } from '@mui/material';
-import { Home, People, Receipt, Payment } from '@mui/icons-material';
+import { House, People, Receipt, Payment } from '@mui/icons-material';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -42,7 +42,7 @@ const Dashboard = () => {
       <Grid container spacing={3}>
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
-            <Home fontSize="large" />
+            <House fontSize="large" />
             <Typography variant="h6">Houses</Typography>
             <Typography variant="h4">{dashboardData.houses}</Typography>
             <Button component={Link} to="/houses" variant="outlined" color="primary">View details</Button>
@@ -80,7 +80,7 @@ const Dashboard = () => {
       <Grid container spacing={3} sx={{ marginTop: '20px' }}>
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
-            <Typography variant="h6">Month Collections</Typography>
+            <Typography variant="h6">Total Collections</Typography>
             <Typography variant="h4">{dashboardData.rentCollected}</Typography>
           </Paper>
         </Grid>

@@ -19,8 +19,7 @@ exports.up = async function(knex) {
     LEFT JOIN tenants ON payments.tenantID = tenants.tenantID
     LEFT JOIN houses ON tenants.houseNumber = houses.houseID
     LEFT JOIN invoices ON payments.invoiceID = invoices.invoiceID
-    LEFT JOIN linkage ON tenants.tenantID = linkage.tenantID
-    LEFT JOIN periods ON linkage.periodID = periods.periodID
+    LEFT JOIN periods ON invoices.periodID = periods.periodID
   `);
 };
 

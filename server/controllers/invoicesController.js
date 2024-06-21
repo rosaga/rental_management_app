@@ -77,6 +77,9 @@ const updateInvoice = async (id, updatedData) => {
     if (updatedData.status === 'paid' && invoice.status !== 'paid') {
       const tenant = await db('tenants').where({ tenantID: invoice.tenantID }).first();
 
+      // Fetch the periodID from the invoice
+      const periodID = invoice.periodID;
+
       // Calculate the balance
       const balance = invoice.amountDue - tenant.negotiatedRent;
 
@@ -88,6 +91,7 @@ const updateInvoice = async (id, updatedData) => {
         balance: balance,
         dateofPayment: new Date(),
         comment: 'Payment for invoice ' + invoice.invoiceID,
+        periodID: periodID,
       };
 
       await db('payments').insert(newPayment);
@@ -101,6 +105,8 @@ const updateInvoice = async (id, updatedData) => {
     throw error;
   }
 };
+
+
 
 // Delete invoice
 const deleteInvoice = async (id) => {

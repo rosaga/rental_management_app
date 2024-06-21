@@ -27,7 +27,7 @@ const createPayment = async (paymentData) => {
 // Get all payments
 const getAllPayments = async () => {
   try {
-    const payments = await db('payments').select('*');
+    const payments = await db('paymentsView').select('*');
     return payments;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ const getAllPayments = async () => {
 // Get payment by ID
 const getPaymentById = async (id) => {
   try {
-    const payment = await db('payments').where('paymentID', id).first();
+    const payment = await db('paymentsView').where('paymentID', id).first();
     return payment;
   } catch (error) {
     throw error;
