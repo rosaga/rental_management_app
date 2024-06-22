@@ -29,12 +29,12 @@ router.get('/dashboard', async (req, res) => {
     const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-11
     const currentYear = new Date().getFullYear();
 
-    const currentMonthRentCollected = await db('payments')
-      .join('periods', 'payments.periodID', 'periods.periodID')
-      .where('periods.month', currentMonth)
-      .andWhere('periods.year', currentYear)
-      .sum('amountPaid as total')
-      .first();
+    // const currentMonthRentCollected = await db('payments')
+    //   .join('periods', 'payments.periodID', 'periods.periodID')
+    //   .where('periods.month', currentMonth)
+    //   .andWhere('periods.year', currentYear)
+    //   .sum('amountPaid as total')
+    //   .first();
 
     const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
 
@@ -43,7 +43,7 @@ router.get('/dashboard', async (req, res) => {
       tenants: tenants.count,
       invoices: invoices.count,
       payments: payments.count,
-      rentCollected: currentMonthRentCollected.total || 0,
+      // rentCollected: currentMonthRentCollected.total || 0,
       tenantBalances: tenantBalances.total,
       unpaidInvoices: unpaidInvoices.count,
     });
