@@ -1,16 +1,12 @@
 const knex = require('knex');
 
 const db = knex({
-  client: 'mssql',
+  client: 'mysql2',
   connection: {
-    server: 'localhost',
-    user: 'sa',
-    password: '12345678',
-    database: 'rental',
-    port: 1433,
-    options: {
-      enableArithAbort: true
-    }
+    host: 'localhost',
+    user: 'root',
+    password: 'Tedaringo628!',
+    database: 'Rental'
   },
   migrations: {
     directory: './server/migrations'

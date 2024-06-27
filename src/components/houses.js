@@ -52,7 +52,7 @@ const Houses = () => {
   };
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{ height: 600, width: '100%', marginTop: '-100px' }}>
       <h2>Current House Listings</h2>
       <DataGrid
         rows={houses}

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import {
   Drawer, List, ListItem, ListItemIcon, ListItemText,
-  Toolbar, AppBar, Typography, IconButton, Collapse, Button, Box
+  Toolbar, AppBar, Typography, Button, Box, Collapse
 } from '@mui/material';
-import { Home, People, Receipt, Payment, LocationOn, Menu, ExpandLess, ExpandMore, Add, List as ListIcon, ExitToApp, Apartment, House } from '@mui/icons-material';
+import {
+  Home, People, Receipt, Payment, LocationOn, ExpandLess, ExpandMore, Add, List as ListIcon,
+  ExitToApp, Apartment, House
+} from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -30,16 +33,7 @@ const Navigation = () => {
 
   return (
     <div style={{ display: 'flex' }}>
-      <AppBar position="fixed" style={{ zIndex: 1300, width: `calc(100% - ${drawerWidth}px)`, marginLeft: drawerWidth }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <Menu />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Rental Management
-          </Typography>
-        </Toolbar>
-      </AppBar>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -47,6 +41,8 @@ const Navigation = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            backgroundColor: '#2C3539', 
+            color: 'white', 
           },
         }}
         variant="permanent"
@@ -54,14 +50,18 @@ const Navigation = () => {
       >
         <Toolbar />
         <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
+          {/* Typography added here */}
+          <Typography variant="h5" align="center" sx={{ mt: 2, mb: 2, color: 'white' }}>
+            Rubedo Rental Management
+          </Typography>
           <List style={{ flex: 1 }}>
             <ListItem button component={Link} to="/dashboard">
-              <ListItemIcon><Home /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><Home /></ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
 
             <ListItem button onClick={() => handleClick('apartments')}>
-              <ListItemIcon><Apartment /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><Apartment /></ListItemIcon>
               <ListItemText primary="Apartments" />
               {open.apartments ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -79,7 +79,7 @@ const Navigation = () => {
             </Collapse>
 
             <ListItem button onClick={() => handleClick('houses')}>
-              <ListItemIcon><House /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><House /></ListItemIcon>
               <ListItemText primary="Houses" />
               {open.houses ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -97,7 +97,7 @@ const Navigation = () => {
             </Collapse>
 
             <ListItem button onClick={() => handleClick('tenants')}>
-              <ListItemIcon><People /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><People /></ListItemIcon>
               <ListItemText primary="Tenants" />
               {open.tenants ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -115,7 +115,7 @@ const Navigation = () => {
             </Collapse>
 
             <ListItem button onClick={() => handleClick('invoices')}>
-              <ListItemIcon><Receipt /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><Receipt /></ListItemIcon>
               <ListItemText primary="Invoices" />
               {open.invoices ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -133,7 +133,7 @@ const Navigation = () => {
             </Collapse>
 
             <ListItem button onClick={() => handleClick('payments')}>
-              <ListItemIcon><Payment /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}><Payment /></ListItemIcon>
               <ListItemText primary="Payments" />
               {open.payments ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -151,7 +151,7 @@ const Navigation = () => {
             </Collapse>
 
             <ListItem button component={Link} to="/locations">
-              <ListItemIcon><LocationOn /></ListItemIcon>
+              <ListItemIcon sx={{ color: 'white' }}> <LocationOn /></ListItemIcon>
               <ListItemText primary="Locations" />
             </ListItem>
           </List>

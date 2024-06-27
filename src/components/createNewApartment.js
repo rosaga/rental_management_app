@@ -26,7 +26,7 @@ const CreateNewApartment = () => {
   };
 
   return (
-    <Container>
+    <Container style = {{marginTop: '-100px'}}>
       <Typography variant="h4" gutterBottom>
         Add a New Apartment
       </Typography>

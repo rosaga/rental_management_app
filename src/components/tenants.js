@@ -56,7 +56,7 @@ const Tenants = () => {
   };
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{ height: 600, width: '100%', marginTop: '-100px' }}>
       <h2>Current Tenants Listing</h2>
       <DataGrid
         rows={tenants}

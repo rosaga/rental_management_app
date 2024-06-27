@@ -27,7 +27,7 @@ const Apartments = () => {
   };
 
   return (
-    <Container>
+    <Container style = {{marginTop: '-100px'}}>
       <Typography variant="h4" gutterBottom>
         Apartments
       </Typography>

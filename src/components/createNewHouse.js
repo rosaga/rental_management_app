@@ -48,7 +48,7 @@ const CreateNewHouse = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' , marginTop: '-100px'}}>
       <Navigation />
       <Container maxWidth="md" sx={{ mt: 8 }}>
         <Typography variant="h4" gutterBottom>

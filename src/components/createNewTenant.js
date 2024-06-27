@@ -3,6 +3,7 @@ import axios from 'axios';
 import { TextField, Button, Container, Typography, Grid, MenuItem, Box } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import Navigation from '../components/navigation';
 
 const CreateNewTenant = () => {
@@ -18,7 +19,6 @@ const CreateNewTenant = () => {
   });
 
   const [houses, setHouses] = useState([]);
-  const [apartments, setApartments] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -31,17 +31,7 @@ const CreateNewTenant = () => {
       }
     };
 
-    const fetchApartments = async () => {
-      try {
-        const response = await axios.get('http://localhost:5001/api/apartments');
-        setApartments(response.data);
-      } catch (err) {
-        setError(err.response ? err.response.data.error : 'An error occurred');
-      }
-    };
-
     fetchHouses();
-    fetchApartments();
   }, []);
 
   const handleChange = (e) => {
@@ -61,7 +51,12 @@ const CreateNewTenant = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5001/api/tenants', formData);
+      // Format the dateAdmitted to 'YYYY-MM-DD HH:mm:ss' before sending it
+      const formattedData = {
+        ...formData,
+        dateAdmitted: formData.dateAdmitted ? dayjs(formData.dateAdmitted).format('YYYY-MM-DD HH:mm:ss') : null,
+      };
+      await axios.post('http://localhost:5001/api/tenants', formattedData);
       alert('Tenant created successfully');
       setFormData({
         tenant_name: '',
@@ -79,7 +74,7 @@ const CreateNewTenant = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', marginTop: '-100px' }}>
       <Navigation />
       <Container maxWidth="md" sx={{ mt: 8 }}>
         <Typography variant="h4" gutterBottom>

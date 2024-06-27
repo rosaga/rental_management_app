@@ -89,11 +89,11 @@ const Invoices = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '20px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '20px', marginTop: '-100px'}}>
       <Typography variant="h4" gutterBottom>
         Invoices
       </Typography>
-      <Box sx={{ display: 'flex', marginBottom: '20px' }}>
+      {/* <Box sx={{ display: 'flex', marginBottom: '20px' }}>
         <TextField
           select
           label="Month"
@@ -125,7 +125,7 @@ const Invoices = () => {
         <Button variant="contained" color="primary" onClick={handleFilter}>
           Filter
         </Button>
-      </Box>
+      </Box> */}
       <Box sx={{ height: 600, width: '100%' }}>
         <DataGrid
           rows={invoices}
