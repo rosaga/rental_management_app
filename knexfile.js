@@ -1,60 +1,56 @@
+require('dotenv').config(); 
+
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-module.exports = {
-
-  development: {
-    client: 'mysql2',
-    connection: {
-      host: 'localhost', // Use appropriate host if different
-      user: 'root',
-      password: 'Tedaringo628!',
-      database: 'Rental'
-    },
-    migrations: {
-      directory: './migrations', // Ensure this path is correct
-      tableName: 'knex_migrations'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    }
+export const development = {
+  client: 'mysql2',
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
-
-  staging: {
-    client: 'mysql2',
-    connection: {
-      host: 'localhost', // Use appropriate host if different
-      user: 'root',
-      password: 'Tedaringo628!',
-      database: 'Rental'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      directory: './migrations', // Ensure this path is correct
-      tableName: 'knex_migrations'
-    }
+  migrations: {
+    directory: './migrations', // Ensure this path is correct
+    tableName: 'knex_migrations'
   },
-
-  production: {
-    client: 'mysql2',
-    connection: {
-      host: 'localhost', // Use appropriate host if different
-      user: 'root',
-      password: 'Tedaringo628!',
-      database: 'Rental'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      directory: './migrations', // Ensure this path is correct
-      tableName: 'knex_migrations'
-    }
+  pool: {
+    min: 2,
+    max: 10
   }
-
+};
+export const staging = {
+  client: 'mysql2',
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  },
+  pool: {
+    min: 2,
+    max: 10
+  },
+  migrations: {
+    directory: './migrations', // Ensure this path is correct
+    tableName: 'knex_migrations'
+  }
+};
+export const production = {
+  client: 'mysql2',
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  },
+  pool: {
+    min: 2,
+    max: 10
+  },
+  migrations: {
+    directory: './migrations', // Ensure this path is correct
+    tableName: 'knex_migrations'
+  }
 };

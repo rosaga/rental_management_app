@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 
-// Hard-coded JWT secret
-const JWT_SECRET = 'AVBb1hf1rOkA8jQgxGx0rUGxNDoGNiO6';
+// JWT secret
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 const login = async (req, res) => {
   const { username, password } = req.body;
