@@ -12,7 +12,7 @@ const Apartments = () => {
   useEffect(() => {
     const fetchApartments = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/apartments');
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/apartments`);
         setApartments(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');

@@ -21,10 +21,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const dashboardResponse = await axios.get('http://localhost:5001/api/dashboard');
+        const dashboardResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard`);
         setDashboardData(dashboardResponse.data);
 
-        const userResponse = await axios.get('http://localhost:5001/api/user');
+        const userResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/user`);
         setUserData(userResponse.data);
         
         setLoading(false);

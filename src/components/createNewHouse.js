@@ -13,7 +13,7 @@ const CreateNewHouse = () => {
 
   useEffect(() => {
     // Fetch apartments from the API
-    axios.get('http://localhost:5001/api/apartments')
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/apartments`)
       .then(response => {
         setApartments(response.data);
       })
@@ -33,7 +33,7 @@ const CreateNewHouse = () => {
     };
 
     try {
-      await axios.post('http://localhost:5001/api/houses', newHouse);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/houses`, newHouse);
       alert('House added successfully!');
 
       // Clear form

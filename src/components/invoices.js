@@ -22,7 +22,7 @@ const Invoices = () => {
 
   const fetchInvoices = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/invoices');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/invoices`);
       setInvoices(response.data);
     } catch (error) {
       console.error('Error fetching invoices:', error);
@@ -38,7 +38,7 @@ const Invoices = () => {
 
   const handleFilter = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/invoices', {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/invoices`, {
         params: {
           month: filter.month,
           year: filter.year,
@@ -52,7 +52,7 @@ const Invoices = () => {
 
   const handleStatusChange = async (invoiceID, newStatus) => {
     try {
-      const response = await axios.put(`http://localhost:5001/api/invoices/${invoiceID}`, { status: newStatus });
+      const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/invoices/${invoiceID}`, { status: newStatus });
       console.log('Update response:', response.data);
       fetchInvoices(); // Refresh the list
     } catch (error) {
