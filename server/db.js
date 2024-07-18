@@ -14,7 +14,7 @@ const db = knex({
     directory: './server/migrations'
   },
   seeds: {
-    directory: './server/seeds'
+    directory: '.seeds'
   }
 });
 

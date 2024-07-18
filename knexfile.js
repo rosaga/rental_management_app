@@ -12,8 +12,11 @@ export const development = {
     database: process.env.DB_NAME,
   },
   migrations: {
-    directory: './migrations', // Ensure this path is correct
+    directory: './migrations', 
     tableName: 'knex_migrations'
+  },
+  seeds: {
+  directory: './seeds'
   },
   pool: {
     min: 2,
@@ -33,7 +36,7 @@ export const staging = {
     max: 10
   },
   migrations: {
-    directory: './migrations', // Ensure this path is correct
+    directory: './migrations', 
     tableName: 'knex_migrations'
   }
 };
@@ -50,7 +53,11 @@ export const production = {
     max: 10
   },
   migrations: {
-    directory: './migrations', // Ensure this path is correct
+    directory: './migrations', 
     tableName: 'knex_migrations'
-  }
+  },
+  seeds: {
+    directory: './seeds'
+    },
+
 };

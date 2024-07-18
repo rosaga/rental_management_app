@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
 exports.seed = async function(knex) {
-  const hashedPassword1 = await bcrypt.hash('password123', 10);
+  const hashedPassword1 = await bcrypt.hash('admin123', 10);
   const hashedPassword2 = await bcrypt.hash('password456', 10);
   const hashedPassword3 = await bcrypt.hash('password789', 10);
 
