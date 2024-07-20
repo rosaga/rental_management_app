@@ -18,7 +18,7 @@ const createMonthlyInvoices = async () => {
       const invoiceData = {
         tenantID: tenant.tenantID,
         periodID: period.periodID,
-        dateDue: new Date(currentYear, new Date().getMonth() + 1, 1).toISOString().slice(0, 10),
+        dateDue: new Date(currentYear, new Date().getMonth() + 1, 5).toISOString().slice(0, 10),
         amountDue: tenant.negotiatedRent,
         status: 'unpaid',
         comment: `Rent for ${currentMonth} ${currentYear}`,
@@ -33,5 +33,5 @@ const createMonthlyInvoices = async () => {
   }
 };
 
-// Schedule the cron job to run at midnight on the 1st of every month
-cron.schedule('0 0 1 * *', createMonthlyInvoices);
+// Schedule the cron job to run at midnight on the 5th of every month
+cron.schedule('0 0 5 * *', createMonthlyInvoices);
