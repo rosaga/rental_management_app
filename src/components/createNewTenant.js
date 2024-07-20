@@ -17,6 +17,8 @@ const CreateNewTenant = () => {
     dateAdmitted: null,
     negotiatedRent: '',
   });
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
 
   const [houses, setHouses] = useState([]);
   const [error, setError] = useState('');
@@ -24,7 +26,7 @@ const CreateNewTenant = () => {
   useEffect(() => {
     const fetchHouses = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/houses');
+        const response = await axios.get(`${apiUrl}/api/houses`);
         setHouses(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
@@ -56,7 +58,7 @@ const CreateNewTenant = () => {
         ...formData,
         dateAdmitted: formData.dateAdmitted ? dayjs(formData.dateAdmitted).format('YYYY-MM-DD HH:mm:ss') : null,
       };
-      await axios.post('http://localhost:5001/api/tenants', formattedData);
+      await axios.post(`${apiUrl}/api/tenants`, formattedData);
       alert('Tenant created successfully');
       setFormData({
         tenant_name: '',

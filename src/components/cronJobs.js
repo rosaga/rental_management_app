@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const db = require('../../server/db'); // Make sure this points to your database configuration
+const db = require('../../server/db'); 
 
 // Function to create invoices
 const createMonthlyInvoices = async () => {

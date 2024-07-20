@@ -21,10 +21,13 @@ const CreateNewPayment = () => {
   const [invoices, setInvoices] = useState([]);
   const [error, setError] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     const fetchTenants = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/tenants');
+        const response = await axios.get(`${apiUrl}/api/tenants`);
         setTenants(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
@@ -39,7 +42,7 @@ const CreateNewPayment = () => {
     setFormData({ ...formData, tenantID, invoiceID: '' });
 
     try {
-      const response = await axios.get(`http://localhost:5001/api/invoices?tenantID=${tenantID}`);
+      const response = await axios.get(`${apiUrl}/api/invoices?tenantID=${tenantID}`);
       setInvoices(response.data);
     } catch (err) {
       setError(err.response ? err.response.data.error : 'An error occurred');
@@ -63,7 +66,7 @@ const CreateNewPayment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5001/api/payments', formData);
+      await axios.post(`${apiUrl}/api/payments`, formData);
       alert('Payment created successfully');
       setFormData({
         tenantID: '',

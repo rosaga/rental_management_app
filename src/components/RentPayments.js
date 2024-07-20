@@ -10,10 +10,13 @@ const RentPayments = () => {
   const [filterYear, setFilterYear] = useState('');
   const [filteredPayments, setFilteredPayments] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/payments');
+        const response = await axios.get(`${apiUrl}/api/payments`);
         const dataWithUniqueKeys = response.data.map((item, index) => ({
           ...item,
           uniqueKey: `${item.paymentID}-${index}`,

@@ -6,11 +6,13 @@ const CreateNewApartment = () => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [numHouses, setNumHouses] = useState('');
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:5001/api/apartments', {
+      await axios.post(`${apiUrl}/api/apartments`, {
         name,
         location,
         num_houses: numHouses,

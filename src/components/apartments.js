@@ -9,10 +9,13 @@ const Apartments = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     const fetchApartments = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/apartments');
+        const response = await axios.get(`${apiUrl}/api/apartments`);
         setApartments(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');

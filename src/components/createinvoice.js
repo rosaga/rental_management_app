@@ -16,10 +16,12 @@ const CreateInvoice = () => {
   const [tenants, setTenants] = useState([]);
   const [error, setError] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchTenants = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/tenants');
+        const response = await axios.get(`${apiUrl}/api/tenants`);
         setTenants(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
@@ -30,16 +32,30 @@ const CreateInvoice = () => {
   }, []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (name === 'dateDue') {
+      const date = new Date(value);
+      const month = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear().toString();
+      setFormData((prevData) => ({
+        ...prevData,
+        dateDue: value,
+        month,
+        year,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5001/api/invoices', formData);
+      await axios.post(`${apiUrl}/api/invoices`, formData);
       alert('Invoice created successfully');
       setFormData({
         tenantID: '',
@@ -53,23 +69,6 @@ const CreateInvoice = () => {
       setError(err.response ? err.response.data.error : 'An error occurred');
     }
   };
-
-  const currentYear = new Date().getFullYear();
-  const years = [currentYear, currentYear + 1, currentYear + 2];
-  const months = [
-    { value: 'January', label: 'Jan' },
-    { value: 'February', label: 'Feb' },
-    { value: 'March', label: 'Mar' },
-    { value: 'April', label: 'Apr' },
-    { value: 'May', label: 'May' },
-    { value: 'June', label: 'Jun' },
-    { value: 'July', label: 'Jul' },
-    { value: 'August', label: 'Aug' },
-    { value: 'September', label: 'Sep' },
-    { value: 'October', label: 'Oct' },
-    { value: 'November', label: 'Nov' },
-    { value: 'December', label: 'Dec' },
-  ];
 
   return (
     <Box sx={{ display: 'flex', marginTop: '-100px'}}>
@@ -120,40 +119,6 @@ const CreateInvoice = () => {
                 value={formData.dateDue}
                 onChange={handleChange}
               />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                select
-                label="Month"
-                name="month"
-                fullWidth
-                value={formData.month}
-                onChange={handleChange}
-              >
-                {months.map((month) => (
-                  <MenuItem key={month.value} value={month.value}>
-                    {month.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                select
-                label="Year"
-                name="year"
-                fullWidth
-                value={formData.year}
-                onChange={handleChange}
-              >
-                {years.map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField

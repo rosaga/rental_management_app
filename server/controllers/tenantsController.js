@@ -10,25 +10,25 @@ const createTenant = async (tenantData) => {
   }
 };
 
-// Get all tenants with associated house information
+// Get all tenants with associated house information from tenantView
 const getAllTenants = async () => {
   try {
-    const tenants = await db('tenants')
-      .select('tenants.*', 'houses.house_name')
-      .leftJoin('houses', 'tenants.house_number', 'houses.houseID');
+    const tenants = await db('tenantsView')
+      .select('tenantsView.*', 'houses.house_name')
+      .leftJoin('houses', 'tenantsView.house_number', 'houses.houseID');
     return tenants;
   } catch (error) {
     throw error;
   }
 };
 
-// Get tenant by ID with associated house information
+// Get tenant by ID with associated house information from tenantView
 const getTenantById = async (id) => {
   try {
-    const tenant = await db('tenants')
-      .select('tenants.*', 'houses.house_name')
-      .leftJoin('houses', 'tenants.house_number', 'houses.houseID')
-      .where('tenants.tenantID', id)
+    const tenant = await db('tenantsView')
+      .select('tenantsView.*', 'houses.house_name')
+      .leftJoin('houses', 'tenantsView.house_number', 'houses.houseID')
+      .where('tenantsView.tenantID', id)
       .first();
     return tenant;
   } catch (error) {

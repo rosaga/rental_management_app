@@ -54,10 +54,20 @@ router.get('/dashboard', async (req, res) => {
 });
 
 
-
-
 // Create User
 router.post('/users', authController.createUser);
+
+router.get('/users', authController.getAllUsers);
+
+
+router.get('/tenants', async (req, res) => {
+  try {
+    const tenantsViewData = await db.select('*').from('tenantsView');
+    res.json(tenantsViewData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch tenants view data' });
+  }
+});
 
 // Tenants routes
 router.post('/tenants', async (req, res) => {
@@ -69,14 +79,7 @@ router.post('/tenants', async (req, res) => {
   }
 });
 
-router.get('/tenants', async (req, res) => {
-  try {
-    const tenantsViewData = await db.select('*').from('tenantsView');
-    res.json(tenantsViewData);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch tenants view data' });
-  }
-});
+
 
 
 router.get('/tenants/:id', async (req, res) => {

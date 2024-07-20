@@ -17,14 +17,16 @@ const Dashboard = () => {
 
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const dashboardResponse = await axios.get('http://localhost:5001/api/dashboard');
+        const dashboardResponse = await axios.get(`${apiUrl}/api/dashboard`);
         setDashboardData(dashboardResponse.data);
 
-        const userResponse = await axios.get('http://localhost:5001/api/user');
+        const userResponse = await axios.get(`${apiUrl}/api/users`);
         setUserData(userResponse.data);
         
         setLoading(false);

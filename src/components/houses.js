@@ -6,10 +6,13 @@ import { Button } from '@mui/material';
 const Houses = () => {
   const [houses, setHouses] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     const fetchHouses = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/houses');
+        const response = await axios.get(`${apiUrl}/api/houses`);
         setHouses(response.data);
       } catch (error) {
         console.error('Error fetching houses:', error);
@@ -44,7 +47,7 @@ const Houses = () => {
 
   const handleDelete = async (houseID) => {
     try {
-      await axios.delete(`http://localhost:5001/api/houses/${houseID}`);
+      await axios.delete(`${apiUrl}/api/houses/${houseID}`);
       setHouses(houses.filter((house) => house.houseID !== houseID));
     } catch (error) {
       console.error('Error deleting house:', error);

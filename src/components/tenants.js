@@ -6,10 +6,13 @@ import { Button } from '@mui/material';
 const Tenants = () => {
   const [tenants, setTenants] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     const fetchTenants = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/tenants');
+        const response = await axios.get(`${apiUrl}/api/tenants`);
         setTenants(response.data);
       } catch (error) {
         console.error('Error fetching tenants:', error);
@@ -48,7 +51,7 @@ const Tenants = () => {
 
   const handleDelete = async (tenantID) => {
     try {
-      await axios.delete(`http://localhost:5001/api/tenants/${tenantID}`);
+      await axios.delete(`${apiUrl}/api/tenants/${tenantID}`);
       setTenants(tenants.filter((tenant) => tenant.tenantID !== tenantID));
     } catch (error) {
       console.error('Error deleting tenant:', error);

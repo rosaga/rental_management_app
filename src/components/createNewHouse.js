@@ -11,9 +11,12 @@ const CreateNewHouse = () => {
   const [houseStatus, setHouseStatus] = useState('Vacant');
   const [apartments, setApartments] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+
   useEffect(() => {
     // Fetch apartments from the API
-    axios.get('http://localhost:5001/api/apartments')
+    axios.get(`${apiUrl}/api/apartments`)
       .then(response => {
         setApartments(response.data);
       })
@@ -33,7 +36,7 @@ const CreateNewHouse = () => {
     };
 
     try {
-      await axios.post('http://localhost:5001/api/houses', newHouse);
+      await axios.post(`${apiUrl}/api/houses`, newHouse);
       alert('House added successfully!');
 
       // Clear form
