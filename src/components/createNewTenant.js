@@ -58,11 +58,7 @@ const CreateNewTenant = () => {
         ...formData,
         dateAdmitted: formData.dateAdmitted ? dayjs(formData.dateAdmitted).format('YYYY-MM-DD HH:mm:ss') : null,
       };
-<<<<<<< HEAD
-      await axios.post(`${apiUrl}/api/tenants`, formattedData);
-=======
       await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/tenants`, formattedData);
->>>>>>> 683a4985c7be0cd19513650eaf2ef101f53e22a6
       alert('Tenant created successfully');
       setFormData({
         tenant_name: '',
