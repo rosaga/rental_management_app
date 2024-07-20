@@ -15,7 +15,7 @@ const ApartmentDetails = () => {
   useEffect(() => {
     const fetchApartmentDetails = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/apartments/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/apartments/${id}`);
         setApartmentDetails(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');

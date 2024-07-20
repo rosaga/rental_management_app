@@ -21,7 +21,11 @@ const CreateInvoice = () => {
   useEffect(() => {
     const fetchTenants = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(`${apiUrl}/api/tenants`);
+=======
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/tenants`);
+>>>>>>> 683a4985c7be0cd19513650eaf2ef101f53e22a6
         setTenants(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
@@ -55,7 +59,11 @@ const CreateInvoice = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
       await axios.post(`${apiUrl}/api/invoices`, formData);
+=======
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/invoices`, formData);
+>>>>>>> 683a4985c7be0cd19513650eaf2ef101f53e22a6
       alert('Invoice created successfully');
       setFormData({
         tenantID: '',

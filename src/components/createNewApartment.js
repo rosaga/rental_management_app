@@ -12,7 +12,7 @@ const CreateNewApartment = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${apiUrl}/api/apartments`, {
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/apartments`, {
         name,
         location,
         num_houses: numHouses,
