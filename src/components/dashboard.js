@@ -19,16 +19,15 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const dashboardResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard`);
+        const dashboardResponse = await axios.get(`${apiUrl}/api/dashboard`);
         setDashboardData(dashboardResponse.data);
 
-        const userResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users`);
+        const userResponse = await axios.get(`${apiUrl}/api/users`);
         setUserData(userResponse.data);
-        
+
         setLoading(false);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -37,7 +36,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [apiUrl]);
 
   if (loading) {
     return <CircularProgress />;
@@ -52,108 +51,100 @@ const Dashboard = () => {
           <Paper elevation={3} sx={{ padding: '10px' }}>
             <House fontSize="large" />
             <Typography variant="h6">Houses</Typography>
-            <Typography variant="h4">{dashboardData.houses}</Typography>
+            <Typography variant="h4">{dashboardData.houses || 0}</Typography>
 
             <Button component={Link}
-            to="/houses"
-            variant="outlined"
-            sx={{
-              width: '100px',
-              marginBottom: '2px',
-              backgroundColor: '#2C3539',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'black',
-                borderColor: 'white',
-              }
-            }}
+              to="/houses"
+              variant="outlined"
+              sx={{
+                width: '100px',
+                marginBottom: '2px',
+                backgroundColor: '#2C3539',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'black',
+                  borderColor: 'white',
+                }
+              }}
             >
-            View
-            </Button>            
-           <Button component={Link} to="/createNewHouse" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color:'#2C3539', borderColor: 'black' }}>Add</Button>
-
+              View
+            </Button>
+            <Button component={Link} to="/createNewHouse" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color: '#2C3539', borderColor: 'black' }}>Add</Button>
           </Paper>
         </Grid>
-
 
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '10px' }}>
             <People fontSize="large" />
             <Typography variant="h6">Tenants</Typography>
-            <Typography variant="h4">{dashboardData.tenants}</Typography>
+            <Typography variant="h4">{dashboardData.tenants || 0}</Typography>
             <Button component={Link}
-            to="/tenants"
-            variant="outlined"
-            sx={{
-              width: '100px',
-              marginBottom: '2px',
-              backgroundColor: '#2C3539',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'black',
-                borderColor: 'white',
-              }
-            }}
+              to="/tenants"
+              variant="outlined"
+              sx={{
+                width: '100px',
+                marginBottom: '2px',
+                backgroundColor: '#2C3539',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'black',
+                  borderColor: 'white',
+                }
+              }}
             >
-            View
-            </Button>            
-           <Button component={Link} to="/createNewTenant" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color:'#2C3539', borderColor: 'black' }}>Add</Button>
+              View
+            </Button>
+            <Button component={Link} to="/createNewTenant" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color: '#2C3539', borderColor: 'black' }}>Add</Button>
           </Paper>
         </Grid>
-
 
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '10px' }}>
             <Receipt fontSize="large" />
             <Typography variant="h6">Invoices</Typography>
-            <Typography variant="h4">{dashboardData.invoices}</Typography>
-            {/* /createNewInvoice */}
+            <Typography variant="h4">{dashboardData.invoices || 0}</Typography>
             <Button component={Link}
-            to="/invoices"
-            variant="outlined"
-            sx={{
-              width: '100px',
-              marginBottom: '2px',
-              backgroundColor: '#2C3539',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'black',
-                borderColor: 'white',
-              }
-            }}
+              to="/invoices"
+              variant="outlined"
+              sx={{
+                width: '100px',
+                marginBottom: '2px',
+                backgroundColor: '#2C3539',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'black',
+                  borderColor: 'white',
+                }
+              }}
             >
-            View
-            </Button>            
-           <Button component={Link} to="/createNewInvoice" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color:'#2C3539', borderColor: 'black' }}>Add</Button>
-
+              View
+            </Button>
+            <Button component={Link} to="/createNewInvoice" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color: '#2C3539', borderColor: 'black' }}>Add</Button>
           </Paper>
         </Grid>
-
 
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '10px' }}>
             <Payment fontSize="large" />
             <Typography variant="h6">Payments</Typography>
-            <Typography variant="h4">{dashboardData.payments}</Typography>
-            {/* /createNewPayment */}
+            <Typography variant="h4">{dashboardData.payments || 0}</Typography>
             <Button component={Link}
-            to="/rent-payments"
-            variant="outlined"
-            sx={{
-              width: '100px',
-              marginBottom: '2px',
-              backgroundColor: '#2C3539',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'black',
-                borderColor: 'white',
-              }
-            }}
+              to="/rent-payments"
+              variant="outlined"
+              sx={{
+                width: '100px',
+                marginBottom: '2px',
+                backgroundColor: '#2C3539',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'black',
+                  borderColor: 'white',
+                }
+              }}
             >
-            View
-            </Button>            
-           <Button component={Link} to="/createNewPayment" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color:'#2C3539', borderColor: 'black' }}>Add</Button>
-
+              View
+            </Button>
+            <Button component={Link} to="/createNewPayment" variant="outlined" color="primary" sx={{ width: '50px', left: '72px', color: '#2C3539', borderColor: 'black' }}>Add</Button>
           </Paper>
         </Grid>
       </Grid>
@@ -162,25 +153,25 @@ const Dashboard = () => {
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Total Collections</Typography>
-            <Typography variant="h4">{dashboardData.rentCollected}</Typography>
+            <Typography variant="h4">{dashboardData.rentCollected || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Pending Invoices</Typography>
-            <Typography variant="h4">{dashboardData.unpaidInvoices}</Typography>
+            <Typography variant="h4">{dashboardData.unpaidInvoices || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Tenant Balances</Typography>
-            <Typography variant="h4">{dashboardData.tenantBalances}</Typography>
+            <Typography variant="h4">{dashboardData.tenantBalances || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Rentable Units</Typography>
-            <Typography variant="h4">{dashboardData.houses}</Typography>
+            <Typography variant="h4">{dashboardData.houses || 0}</Typography>
           </Paper>
         </Grid>
       </Grid>
