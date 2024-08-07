@@ -14,6 +14,7 @@ exports.up = function(knex) {
         tenants.dateAdmitted,
         tenants.agreement_file,
         tenants.negotiatedRent,
+        tenants.status,
         houses.house_name,
         houses.number_of_rooms,
         houses.house_status,

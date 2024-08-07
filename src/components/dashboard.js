@@ -13,20 +13,20 @@ const Dashboard = () => {
     rentCollected: 0,
     tenantBalances: 0,
     unpaidInvoices: 0,
+    rentableUnits: 0,
   });
 
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const dashboardResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard`);
+        const dashboardResponse = await axios.get(`${apiUrl}/api/dashboard`);
         setDashboardData(dashboardResponse.data);
 
-        const userResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users`);
+        const userResponse = await axios.get(`${apiUrl}/api/users`);
         setUserData(userResponse.data);
         
         setLoading(false);
@@ -107,7 +107,6 @@ const Dashboard = () => {
             <Receipt fontSize="large" />
             <Typography variant="h6">Invoices</Typography>
             <Typography variant="h4">{dashboardData.invoices}</Typography>
-            {/* /createNewInvoice */}
             <Button component={Link}
             to="/invoices"
             variant="outlined"
@@ -135,7 +134,6 @@ const Dashboard = () => {
             <Payment fontSize="large" />
             <Typography variant="h6">Payments</Typography>
             <Typography variant="h4">{dashboardData.payments}</Typography>
-            {/* /createNewPayment */}
             <Button component={Link}
             to="/rent-payments"
             variant="outlined"
@@ -162,25 +160,25 @@ const Dashboard = () => {
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Total Collections</Typography>
-            <Typography variant="h4">{dashboardData.rentCollected}</Typography>
+            <Typography variant="h4">{dashboardData.rentCollected || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Pending Invoices</Typography>
             <Typography variant="h4">{dashboardData.unpaidInvoices}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Tenant Balances</Typography>
-            <Typography variant="h4">{dashboardData.tenantBalances}</Typography>
+            <Typography variant="h4">{dashboardData.tenantBalances || 0}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '10px' }}>
+          <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Rentable Units</Typography>
-            <Typography variant="h4">{dashboardData.houses}</Typography>
+            <Typography variant="h4">{dashboardData.rentableUnits}</Typography>
           </Paper>
         </Grid>
       </Grid>
