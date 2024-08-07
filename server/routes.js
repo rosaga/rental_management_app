@@ -24,9 +24,13 @@ router.get('/dashboard', async (req, res) => {
     const invoices = await db('invoices').count('invoiceID as count').first();
     const payments = await db('payments').count('paymentID as count').first();
     const rentCollected = await db('payments').sum('amountPaid as total').first();
-    const tenantBalances = await db('tenants').sum('account as total').first();
     const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
     const vacantHouses = await db('houses').where('house_status', 'Vacant').count('houseID as count').first();
+    
+    const tenantBalances = await db('invoices')
+    .where('status', 'unpaid')
+    .sum('amountDue as total')
+    .first();
 
     res.json({
       houses: houses.count,

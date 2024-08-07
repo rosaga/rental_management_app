@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./server/routes');
 const cors = require('cors');
-require('./src/components/cronJobs');
+require('./cronJobs');
 
 require('dotenv').config();
 console.log('DB_HOST:', process.env.DB_HOST);
