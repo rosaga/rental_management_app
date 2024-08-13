@@ -20,17 +20,12 @@ router.post('/login', authController.login);
 router.get('/dashboard', async (req, res) => {
   try {
     const houses = await db('houses').count('houseID as count').first();
-    const tenants = await db('tenants').count('tenantID as count').where('status', true).first();
+    const tenants = await db('tenants').count('tenantID as count').first();
     const invoices = await db('invoices').count('invoiceID as count').first();
     const payments = await db('payments').count('paymentID as count').first();
     const rentCollected = await db('payments').sum('amountPaid as total').first();
-    const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
-    const vacantHouses = await db('houses').where('house_status', 'Vacant').count('houseID as count').first();
-    
-    const tenantBalances = await db('invoices')
-    .where('status', 'unpaid')
-    .sum('amountDue as total')
-    .first();
+    const tenantBalances = await db('invoices').where('status', 'unpaid').sum('amountDue as total').first();
+    const rentableUnits = await db('houses').where('house_status', 'Vacant').count('houseID as count').first();
 
     res.json({
       houses: houses.count,
@@ -39,8 +34,8 @@ router.get('/dashboard', async (req, res) => {
       payments: payments.count,
       rentCollected: rentCollected.total || 0,
       tenantBalances: tenantBalances.total || 0,
-      unpaidInvoices: unpaidInvoices.count,
-      rentableUnits: vacantHouses.count,
+      rentableUnits: rentableUnits.count,
+      unpaidInvoices: invoices.count,
     });
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
