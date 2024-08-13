@@ -2,7 +2,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const mysql = require('mysql2/promise');
 
-const loadTenantsData = async () => {
+const loadCSVData = async () => {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -12,46 +12,63 @@ const loadTenantsData = async () => {
 
   try {
     const results = [];
-    fs.createReadStream('/Users/tedaringo/Downloads/rental-details.csv')
+    const housesInDB = await getAllHouses(connection);
+
+    fs.createReadStream('/Users/tedaringo/Downloads/new-rental.csv')
       .pipe(csv())
       .on('data', (data) => results.push(data))
       .on('end', async () => {
         for (const row of results) {
+          const tenantName = row['TENANT  NAMES'] && row['TENANT  NAMES'].trim().toLowerCase() !== 'vacant' ? row['TENANT  NAMES'] : null;
           const houseName = row['Hse No'];
-          const tenantName = row['TENANT NAMES'];
-          const phoneNumber = row['TELEPHONE NUMBER'];
-          const rentAmount = parseInt(row['RENT PAYABLE'].replace(/,/g, ''));
 
-          if (tenantName !== 'vacant') {
-            // Get the houseID for the corresponding house name
-            const [house] = await connection.query('SELECT houseID FROM houses WHERE house_name = ?', [houseName]);
-            const houseID = house.length > 0 ? house[0].houseID : null;
-
+          // Check if the house exists in the database
+          if (tenantName && housesInDB.includes(houseName)) {
+            const houseID = await getHouseID(connection, houseName);
             if (houseID) {
-              // Insert tenant data into the tenants table
               const tenantSQL = `
                 INSERT INTO tenants (tenant_name, email, ID_number, profession, phone_number, houseNumber, dateAdmitted, negotiatedRent, status)
-                VALUES (?, '', '', '', ?, ?, NULL, ?, 1)
+                VALUES (?, '', ?, '', ?, ?, NULL, ?, 1)
                 ON DUPLICATE KEY UPDATE houseNumber = VALUES(houseNumber), negotiatedRent = VALUES(negotiatedRent), status = 1;
               `;
-              await connection.query(tenantSQL, [tenantName, phoneNumber, houseID, rentAmount]);
+
+              const rentAmount = parseInt(row['RENT PAYABLE'].replace(/,/g, ''));
+              const phoneNumber = row['TELEPHONE NUMBER'];
+              const IDNumber = 0; 
+
+              await connection.query(tenantSQL, [tenantName, IDNumber, phoneNumber, houseID, rentAmount]);
 
               // Update the house status to 'Occupied'
-              const updateHouseStatusSQL = `
-                UPDATE houses SET house_status = 'Occupied' WHERE houseID = ?;
-              `;
-              await connection.query(updateHouseStatusSQL, [houseID]);
+              await updateHouseStatus(connection, houseID, 'Occupied');
             }
+          } else if (!tenantName) {
+            console.log(`Skipping vacant house: ${houseName}`);
+          } else {
+            console.log(`Skipping house not found in DB: ${houseName}`);
           }
         }
-        console.log('Tenants loaded successfully');
+        console.log('Tenant data loaded successfully');
         await connection.end();
       });
   } catch (error) {
-    console.error('Error loading tenants:', error);
+    console.error('Error loading tenant data:', error);
     await connection.end();
   }
 };
 
-// Call the function
-loadTenantsData();
+const getHouseID = async (connection, houseName) => {
+  const [rows] = await connection.query('SELECT houseID FROM houses WHERE house_name = ?', [houseName]);
+  return rows.length > 0 ? rows[0].houseID : null;
+};
+
+const getAllHouses = async (connection) => {
+  const [rows] = await connection.query('SELECT house_name FROM houses');
+  return rows.map(row => row.house_name);
+};
+
+const updateHouseStatus = async (connection, houseID, status) => {
+  await connection.query('UPDATE houses SET house_status = ? WHERE houseID = ?', [status, houseID]);
+};
+
+
+loadCSVData();
