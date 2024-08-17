@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const Tenants = () => {
   const [tenants, setTenants] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [tenantToDelete, setTenantToDelete] = useState(null);
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
 
   useEffect(() => {
     const fetchTenants = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/tenants`);
+        const response = await axios.get(`${apiUrl}/api/tenants`);
         setTenants(response.data);
       } catch (error) {
         console.error('Error fetching tenants:', error);
@@ -32,7 +33,6 @@ const Tenants = () => {
     { field: 'rent_amount', headerName: 'Rent', width: 100 },
     { field: 'dateAdmitted', headerName: 'Admission Date', width: 150 },
     { field: 'negotiatedRent', headerName: 'Negotiated Rent', width: 150 },
-
     {
       field: 'actions',
       headerName: 'Actions',
@@ -41,7 +41,7 @@ const Tenants = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => handleDelete(params.row.tenantID)}
+          onClick={() => handleOpenDialog(params.row.tenantID)}
         >
           Delete
         </Button>
@@ -49,12 +49,24 @@ const Tenants = () => {
     },
   ];
 
-  const handleDelete = async (tenantID) => {
+  const handleOpenDialog = (tenantID) => {
+    setTenantToDelete(tenantID);
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setTenantToDelete(null);
+  };
+
+  const handleDelete = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/tenants/${tenantID}`);
-      setTenants(tenants.filter((tenant) => tenant.tenantID !== tenantID));
+      await axios.delete(`${apiUrl}/api/tenants/${tenantToDelete}`);
+      setTenants(tenants.filter((tenant) => tenant.tenantID !== tenantToDelete));
+      handleCloseDialog();
     } catch (error) {
       console.error('Error deleting tenant:', error);
+      handleCloseDialog();
     }
   };
 
@@ -69,6 +81,25 @@ const Tenants = () => {
         checkboxSelection
         getRowId={(row) => row.tenantID}
       />
+      <Dialog
+        open={open}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this tenant? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

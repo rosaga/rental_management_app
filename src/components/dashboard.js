@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Typography, Box, Grid, Button, Paper, CircularProgress } from '@mui/material';
+import { Typography, Box, Grid, Button, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { House, People, Receipt, Payment } from '@mui/icons-material';
 
 const Dashboard = () => {
@@ -13,8 +13,11 @@ const Dashboard = () => {
     rentCollected: 0,
     tenantBalances: 0,
     unpaidInvoices: 0,
+    rentableUnits: 0,
   });
 
+
+  const [invoices, setInvoices] = useState([]);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -28,6 +31,10 @@ const Dashboard = () => {
         const userResponse = await axios.get(`${apiUrl}/api/users`);
         setUserData(userResponse.data);
 
+
+        const invoicesResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/invoices`);
+        setInvoices(invoicesResponse.data);
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -103,6 +110,7 @@ const Dashboard = () => {
             <Receipt fontSize="large" />
             <Typography variant="h6">Invoices</Typography>
             <Typography variant="h4">{dashboardData.invoices || 0}</Typography>
+
             <Button component={Link}
               to="/invoices"
               variant="outlined"
@@ -128,6 +136,7 @@ const Dashboard = () => {
             <Payment fontSize="large" />
             <Typography variant="h6">Payments</Typography>
             <Typography variant="h4">{dashboardData.payments || 0}</Typography>
+
             <Button component={Link}
               to="/rent-payments"
               variant="outlined"
@@ -171,10 +180,47 @@ const Dashboard = () => {
         <Grid item xs={3}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Rentable Units</Typography>
-            <Typography variant="h4">{dashboardData.houses || 0}</Typography>
+
+            <Typography variant="h4">{dashboardData.rentableUnits}</Typography>
           </Paper>
         </Grid>
       </Grid>
+
+      <Box sx={{ marginTop: '20px' }}>
+        <Typography variant="h6" gutterBottom>Invoices</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Tenant Name</TableCell>
+                <TableCell>Phone Number</TableCell>
+                <TableCell>Amount Due</TableCell>
+                <TableCell>Date Of Invoice</TableCell>
+                <TableCell>Date Due</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell>Month</TableCell>
+                <TableCell>Year</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invoices.map((invoice) => (
+                <TableRow key={invoice.invoiceID}>
+                  <TableCell>{invoice.tenant_name}</TableCell>
+                  <TableCell>{invoice.phone_number}</TableCell>
+                  <TableCell>{invoice.amountDue}</TableCell>
+                  <TableCell>{invoice.dateOfInvoice}</TableCell>
+                  <TableCell>{invoice.dateDue}</TableCell>
+                  <TableCell>{invoice.status}</TableCell>
+                  <TableCell>{invoice.comment}</TableCell>
+                  <TableCell>{invoice.month}</TableCell>
+                  <TableCell>{invoice.year}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Box>
   );
 };

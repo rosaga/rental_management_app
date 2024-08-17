@@ -24,28 +24,18 @@ router.get('/dashboard', async (req, res) => {
     const invoices = await db('invoices').count('invoiceID as count').first();
     const payments = await db('payments').count('paymentID as count').first();
     const rentCollected = await db('payments').sum('amountPaid as total').first();
-    const tenantBalances = await db('tenants').sum('account as total').first();
-
-    const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-11
-    const currentYear = new Date().getFullYear();
-
-    // const currentMonthRentCollected = await db('payments')
-    //   .join('periods', 'payments.periodID', 'periods.periodID')
-    //   .where('periods.month', currentMonth)
-    //   .andWhere('periods.year', currentYear)
-    //   .sum('amountPaid as total')
-    //   .first();
-
-    const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
+    const tenantBalances = await db('invoices').where('status', 'unpaid').sum('amountDue as total').first();
+    const rentableUnits = await db('houses').where('house_status', 'Vacant').count('houseID as count').first();
 
     res.json({
       houses: houses.count,
       tenants: tenants.count,
       invoices: invoices.count,
       payments: payments.count,
-      // rentCollected: currentMonthRentCollected.total || 0,
-      tenantBalances: tenantBalances.total,
-      unpaidInvoices: unpaidInvoices.count,
+      rentCollected: rentCollected.total || 0,
+      tenantBalances: tenantBalances.total || 0,
+      rentableUnits: rentableUnits.count,
+      unpaidInvoices: invoices.count,
     });
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
@@ -60,16 +50,17 @@ router.post('/users', authController.createUser);
 router.get('/users', authController.getAllUsers);
 
 
+
+// Tenants routes
 router.get('/tenants', async (req, res) => {
   try {
-    const tenantsViewData = await db.select('*').from('tenantsView');
-    res.json(tenantsViewData);
+    const tenants = await tenantsController.getAllTenants();
+    res.json(tenants);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch tenants view data' });
+    res.status(500).json({ error: 'Failed to fetch tenants' });
   }
 });
 
-// Tenants routes
 router.post('/tenants', async (req, res) => {
   try {
     const newTenant = await tenantsController.createTenant(req.body);
@@ -78,8 +69,6 @@ router.post('/tenants', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-
 
 
 router.get('/tenants/:id', async (req, res) => {
