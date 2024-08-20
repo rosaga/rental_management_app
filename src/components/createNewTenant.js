@@ -32,10 +32,10 @@ const CreateNewTenant = () => {
         setError(err.response ? err.response.data.error : 'An error occurred');
       }
     };
-
+  
     fetchHouses();
   }, []);
-
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -74,6 +74,7 @@ const CreateNewTenant = () => {
       setError(err.response ? err.response.data.error : 'An error occurred');
     }
   };
+  
 
   return (
     <Box sx={{ display: 'flex', marginTop: '-100px' }}>

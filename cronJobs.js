@@ -1,10 +1,11 @@
 const cron = require('node-cron');
-const db = require('../../server/db'); 
+const db = require('./server/db'); 
 
 // Function to create invoices
 const createMonthlyInvoices = async () => {
   try {
-    const tenants = await db('tenants').select('*');
+    // Select only tenants with status 1 (active)
+    const tenants = await db('tenants').where({ status: 1 });
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().toLocaleString('default', { month: 'long' });
 
@@ -18,7 +19,7 @@ const createMonthlyInvoices = async () => {
       const invoiceData = {
         tenantID: tenant.tenantID,
         periodID: period.periodID,
-        dateDue: new Date(currentYear, new Date().getMonth() + 1, 5).toISOString().slice(0, 10),
+        dateDue: new Date(currentYear, new Date().getMonth() + 1, 1).toISOString().slice(0, 10),
         amountDue: tenant.negotiatedRent,
         status: 'unpaid',
         comment: `Rent for ${currentMonth} ${currentYear}`,
@@ -33,5 +34,5 @@ const createMonthlyInvoices = async () => {
   }
 };
 
-// Schedule the cron job to run at midnight on the 5th of every month
+// Scheduled so that they run at midnight on the 5th of every month
 cron.schedule('0 0 5 * *', createMonthlyInvoices);
