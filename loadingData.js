@@ -4,7 +4,7 @@ const loadingData = async () => {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Tedaringo', 
+    password: 'Tedaringo628', 
     database: 'rental' 
   });
 
