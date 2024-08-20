@@ -5,7 +5,7 @@ const loadingData = async () => {
     host: 'localhost',
     user: 'root',
     password: 'Tedaringo!', 
-    database: 'rental' 
+    database: 'Rental' 
   });
 
   try {
