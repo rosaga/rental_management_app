@@ -1,6 +1,7 @@
 // migrations/20240527052015_create_tenants_view.js
 
 exports.up = function(knex) {
+
     return knex.raw(`
       CREATE VIEW tenantsView AS
       SELECT 

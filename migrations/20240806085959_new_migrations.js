@@ -34,7 +34,8 @@ exports.up = function (knex) {
       table.string('email').notNullable();
       table.integer('ID_number').notNullable();
       table.string('profession').notNullable();
-      table.string('phone_number', 13).notNullable();
+      table.string('phone_number').notNullable();
+
       table.string('agreement_file').defaultTo(null);
       table.timestamp('dateAdmitted').defaultTo(null);
       table.integer('account').notNullable().defaultTo(0);
@@ -101,3 +102,4 @@ exports.down = function (knex) {
     .dropTableIfExists('apartments')
     .dropTableIfExists('contacts');
 };
+
