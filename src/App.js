@@ -19,6 +19,8 @@ import store from './store';
 import { Container, CssBaseline } from '@mui/material';
 import { Box, Toolbar } from '@mui/material'; 
 import CreateNewPayment from './components/createNewPayment';
+import EditHouse from './components/editHouse';
+import EditTenant from './components/editTenant';
 
 const AppContent = () => {
   const location = useLocation();
@@ -44,6 +46,10 @@ const AppContent = () => {
           <Route path="/rent-payments" element={<RentPayments />} />
           <Route path="/invoices" element={<Invoices />} />
           <Route path="/createNewPayment" element={<CreateNewPayment />} />
+          <Route path="/edit-house/:houseID" element={<EditHouse />} />
+          <Route path="/edit-tenant/:tenantID" element={<EditTenant />} />
+
+
           {/* Add other routes here */}
         </Routes>
       </Box>

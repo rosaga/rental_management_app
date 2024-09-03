@@ -22,9 +22,9 @@ const getAllHouses = async () => {
 };
 
 // Get a house by ID
-const getHouseById = async (id) => {
+const getHouseById = async (houseID) => {
   try {
-    const house = await db('houses').where({ houseID: id }).first();
+    const house = await db('houses').where({ houseID: houseID }).first();
     return house;
   } catch (error) {
     throw error;
@@ -32,10 +32,10 @@ const getHouseById = async (id) => {
 };
 
 // Update a house
-const updateHouse = async (id, updatedData) => {
+const updateHouse = async (houseID, updatedData) => {
   try {
-    await db('houses').where({ houseID: id }).update(updatedData);
-    const updatedHouse = await getHouseById(id);
+    await db('houses').where({ houseID }).update(updatedData);
+    const updatedHouse = await getHouseById(houseID);
     return updatedHouse;
   } catch (error) {
     throw error;
@@ -43,15 +43,27 @@ const updateHouse = async (id, updatedData) => {
 };
 
 // Delete a house
-const deleteHouse = async (id) => {
+const deleteHouse = async (houseID) => {
   try {
-    const deletedHouse = await getHouseById(id);
-    await db('houses').where({ houseID: id }).del();
+    const deletedHouse = await getHouseById(houseID);
+    await db('houses').where({ houseID: houseID }).del();
     return deletedHouse;
   } catch (error) {
     throw error;
   }
 };
+
+// get vacant houses
+const getVacantHouses = async () => {
+  try {
+    const vacantHouses = await db('houses').where({ house_status: 'Vacant' });
+    return vacantHouses;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
   createHouse,
@@ -59,4 +71,6 @@ module.exports = {
   getHouseById,
   updateHouse,
   deleteHouse,
+  getVacantHouses
+
 };

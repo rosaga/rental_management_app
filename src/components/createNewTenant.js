@@ -5,15 +5,21 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Navigation from '../components/navigation';
+import { useLocation } from 'react-router-dom';
+
 
 const CreateNewTenant = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const houseID = searchParams.get('houseID');
+
   const [formData, setFormData] = useState({
     tenant_name: '',
     email: '',
     ID_number: '',
     phone_number: '',
     profession: '',
-    houseNumber: '',
+    houseNumber: houseID || '',
     dateAdmitted: null,
     negotiatedRent: '',
   });

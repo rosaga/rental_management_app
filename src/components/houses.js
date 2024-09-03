@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Houses = () => {
   const [houses, setHouses] = useState([]);
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-
   useEffect(() => {
     const fetchHouses = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/houses`);
+        const response = await axios.get(`${apiUrl}/api/houses`);
         setHouses(response.data);
       } catch (error) {
         console.error('Error fetching houses:', error);
@@ -20,7 +22,7 @@ const Houses = () => {
     };
 
     fetchHouses();
-  }, []);
+  }, [apiUrl]);
 
   const columns = [
     { field: 'houseID', headerName: 'House ID', width: 100 },
@@ -34,20 +36,28 @@ const Houses = () => {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleDelete(params.row.houseID)}
-        >
-          Delete
-        </Button>
+        <>
+          <IconButton
+            component={Link}
+            to={`/edit-house/${params.row.houseID}`}
+            color="primary"
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handleDelete(params.row.houseID)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
       ),
     },
   ];
 
   const handleDelete = async (houseID) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/houses/${houseID}`);
+      await axios.delete(`${apiUrl}/api/houses/${houseID}`);
       setHouses(houses.filter((house) => house.houseID !== houseID));
     } catch (error) {
       console.error('Error deleting house:', error);

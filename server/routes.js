@@ -83,9 +83,9 @@ router.get('/tenants/:id', async (req, res) => {
   }
 });
 
-router.put('/tenants/:id', async (req, res) => {
+router.put('/tenants/:tenantID', async (req, res) => {
   try {
-    const updatedTenant = await tenantsController.updateTenant(req.params.id, req.body);
+    const updatedTenant = await tenantsController.updateTenant(req.params.tenantID, req.body);
     res.json(updatedTenant);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -120,9 +120,9 @@ router.get('/houses', async (req, res) => {
   }
 });
 
-router.get('/houses/:id', async (req, res) => {
+router.get('/houses/:houseID', async (req, res) => {
   try {
-    const house = await housesController.getHouseById(req.params.id);
+    const house = await housesController.getHouseById(req.params.houseID);
     if (!house) {
       return res.status(404).json({ message: 'House not found' });
     }
@@ -132,23 +132,90 @@ router.get('/houses/:id', async (req, res) => {
   }
 });
 
-router.put('/houses/:id', async (req, res) => {
+// route to get all vacant houses
+router.get('/houses/vacant', async (req, res) => {
   try {
-    const updatedHouse = await housesController.updateHouse(req.params.id, req.body);
+    console.log("Fetching vacant houses...");
+    const vacantHouses = await housesController.getVacantHouses();
+    console.log("Vacant houses found:", vacantHouses);
+    if (vacantHouses.length === 0) {
+      return res.status(404).json({ message: 'No vacant houses found' });
+    }
+    res.json(vacantHouses);
+  } catch (error) {
+    console.error("Error fetching vacant houses:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.put('/houses/:houseID', async (req, res) => {
+  try {
+    const updatedHouse = await housesController.updateHouse(req.params.houseID, req.body);
     res.json(updatedHouse);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.delete('/houses/:id', async (req, res) => {
+router.delete('/houses/:houseID', async (req, res) => {
   try {
-    const deletedHouse = await housesController.deleteHouse(req.params.id);
+    const deletedHouse = await housesController.deleteHouse(req.params.houseID);
     res.json(deletedHouse);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+// routes/tenants.js
+router.put('/removeTenant/:tenantID', async (req, res) => {
+  try {
+    const removedTenant = await housesController.removeTenantFromHouse(req.params.tenantID);
+    if (!removedTenant) {
+      return res.status(404).json({ message: 'Tenant not found' });
+    }
+    res.json({ message: 'Tenant removed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+router.put('/relocateTenant', async (req, res) => {
+  try {
+    const { tenantID, newHouseID } = req.body;
+    const relocatedTenant = await tenantsController.relocateTenant(tenantID, newHouseID);
+    res.json(relocatedTenant);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
+// Get tenant by house number
+router.get('/tenants/house/:houseNumber', async (req, res) => {
+  try {
+    const { houseNumber } = req.params;
+    const tenant = await db('tenantsView')
+      .where({ houseNumber, status: 1 })
+      .first(); // This returns the first matching tenant
+
+    if (!tenant) {
+      return res.status(404).json({ message: 'No tenant found for this house' });
+    }
+
+    res.json(tenant);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Apartments routes
 router.post('/apartments', async (req, res) => {

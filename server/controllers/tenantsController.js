@@ -66,15 +66,75 @@ const getTenantById = async (id) => {
 };
 
 // Update tenant
-const updateTenant = async (id, updatedData) => {
+const updateTenant = async (tenantID, updatedData) => {
   try {
-    await db('tenants').where({ tenantID: id }).update(updatedData);
-    const updatedTenant = await getTenantById(id);
+    // Only update the fields that are provided in updatedData
+    await db('tenants').where({ tenantID }).update(updatedData);
+    const updatedTenant = await getTenantById(tenantID);
     return updatedTenant;
   } catch (error) {
     throw error;
   }
 };
+
+
+
+// const updateHouse = async (houseID, updatedData) => {
+//   try {
+//     await db('houses').where({ houseID }).update(updatedData);
+//     const updatedHouse = await getHouseById(houseID);
+//     return updatedHouse;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+const removeTenantFromHouse = async (tenantID) => {
+  try {
+    const currentDate = new Date();
+
+    // Update tenant status to 0 (soft delete) and set date of removal
+    await db('tenants')
+      .where({ tenantID: id })
+      .update({
+        status: 0,
+        date_of_removal: currentDate,
+      });
+
+    // Update house status to 'Vacant'
+    const tenant = await db('tenants').where({ tenantID: id }).first();
+    await db('houses').where({ houseID: tenant.houseNumber }).update({ house_status: 'Vacant' });
+
+    return tenant;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const relocateTenant = async (tenantID, newHouseID) => {
+  try {
+    const currentDate = new Date();
+
+    // Update the tenant's house number and relocation date
+    await db('tenants')
+      .where({ tenantID: tenantID })
+      .update({
+        houseNumber: newHouseID,
+        date_of_relocation: currentDate,
+      });
+
+    // Set the old house to 'Vacant' and the new house to 'Occupied'
+    const oldHouseID = await db('tenants').where({ tenantID: tenantID }).select('houseNumber').first();
+    await db('houses').where({ houseID: oldHouseID.houseNumber }).update({ house_status: 'Vacant' });
+    await db('houses').where({ houseID: newHouseID }).update({ house_status: 'Occupied' });
+
+    return { success: true };
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
   createTenant,
@@ -82,4 +142,7 @@ module.exports = {
   getTenantById,
   updateTenant,
   deleteTenant,
+  removeTenantFromHouse,
+  relocateTenant
+  
 };

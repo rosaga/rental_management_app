@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
 
 const Tenants = () => {
   const [tenants, setTenants] = useState([]);
@@ -21,7 +24,7 @@ const Tenants = () => {
     };
 
     fetchTenants();
-  }, []);
+  }, [apiUrl]);
 
   const columns = [
     { field: 'tenant_name', headerName: 'Name', width: 150 },
@@ -33,18 +36,27 @@ const Tenants = () => {
     { field: 'rent_amount', headerName: 'Rent', width: 100 },
     { field: 'dateAdmitted', headerName: 'Admission Date', width: 150 },
     { field: 'negotiatedRent', headerName: 'Negotiated Rent', width: 150 },
+    { field: 'date_of_relocation', headerName: 'Relocation Date', width: 150 },
     {
       field: 'actions',
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleOpenDialog(params.row.tenantID)}
-        >
-          Delete
-        </Button>
+        <>
+          <IconButton
+            component={Link}
+            to={`/edit-tenant/${params.row.tenantID}`}
+            color="primary"
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handleOpenDialog(params.row.tenantID)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
       ),
     },
   ];
