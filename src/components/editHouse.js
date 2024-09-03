@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { TextField, Button, Container, Typography, Grid, Box, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
@@ -135,22 +135,36 @@ const EditHouse = () => {
                 disabled
               />
             </Grid>
-            {tenant && (
-              <Grid item xs={12}>
-                <Typography variant="h6">Tenant: {tenant.tenant_name}</Typography>
-                <Button variant="contained" color="secondary" onClick={handleRemoveTenant}>
-                  Remove Tenant
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setRelocateDialogOpen(true)}
-                  sx={{ ml: 2 }}
-                >
-                  Relocate Tenant
-                </Button>
-              </Grid>
-            )}
+            {tenant ? (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Tenant: {tenant.tenant_name}</Typography>
+                  <Button variant="contained" color="secondary" onClick={handleRemoveTenant}>
+                    Remove Tenant
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setRelocateDialogOpen(true)}
+                    sx={{ ml: 2 }}
+                  >
+                    Relocate Tenant
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={Link}
+                    to={`/createNewTenant?houseID=${houseID}`}
+                    fullWidth
+                  >
+                    Add Tenant
+                  </Button>
+                </Grid>
+              )
+            }
+
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Save Changes
