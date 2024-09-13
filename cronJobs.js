@@ -28,7 +28,7 @@ const createMonthlyInvoices = async () => {
       await db('invoices').insert(invoiceData);
     }
 
-    console.log('Invoices created successfully');
+    console.log('Invoices created successfully'); 
   } catch (error) {
     console.error('Error creating invoices:', error);
   }

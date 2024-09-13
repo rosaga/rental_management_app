@@ -20,6 +20,11 @@ exports.up = function (knex) {
       table.decimal('rent_amount', 10, 2).notNullable();
       table.string('house_status', 50).notNullable().defaultTo('Vacant');
       table.integer('apartmentID').unsigned().notNullable();
+      table.integer('kiwasco_meter_no').notNullable().defaultTo(null);
+      table.integer('kiwasco_account_no').notNullable().defaultTo(null);
+      table.string('remarks').notNullable().defaultTo(null);
+
+
       table.foreign('apartmentID').references('apartmentID').inTable('apartments').onDelete('CASCADE');
     })
     .createTable('periods', function (table) {
@@ -33,12 +38,10 @@ exports.up = function (knex) {
       table.string('tenant_name').notNullable();
       table.string('email').notNullable();
       table.integer('ID_number').notNullable();
-      table.string('profession').notNullable();
       table.string('phone_number').notNullable();
-
       table.string('agreement_file').defaultTo(null);
+      table.string('remarks').defaultTo(null);
       table.timestamp('dateAdmitted').defaultTo(null);
-      table.integer('account').notNullable().defaultTo(0);
       table.integer('negotiatedRent').notNullable().defaultTo(0);
       table.boolean('status').notNullable().defaultTo(true);
     })
