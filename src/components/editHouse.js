@@ -11,6 +11,8 @@ const EditHouse = () => {
     number_of_rooms: '',
     rent_amount: '',
     house_status: '',
+    kiwasco_meter_no:'',
+    kiwasco_account_no:''
   });
   const [tenant, setTenant] = useState(null);
   const [vacantHouses, setVacantHouses] = useState([]);
@@ -121,6 +123,28 @@ const EditHouse = () => {
                 fullWidth
                 type="number"
                 value={formData.rent_amount}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                label="Kiwasco Meter Number"
+                name="kiwasco_meter_no"
+                fullWidth
+                type="number"
+                value={formData.kiwasco_meter_no}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                label="Kiwasco Account Number"
+                name="kiwasco_account_no"
+                fullWidth
+                type="number"
+                value={formData.kiwasco_account_no}
                 onChange={handleChange}
               />
             </Grid>

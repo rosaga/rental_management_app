@@ -4,6 +4,14 @@ const db = require('./server/db');
 // Function to create invoices
 const createMonthlyInvoices = async () => {
   try {
+    // Get the invoice type for rent
+    const rentInvoiceType = await db('invoice_types').where({ invoiceType: 'Rent' }).first();
+    
+    if (!rentInvoiceType) {
+      console.error('Rent invoice type not found');
+      return;
+    }
+
     // Select only tenants with status 1 (active)
     const tenants = await db('tenants').where({ status: 1 });
     const currentYear = new Date().getFullYear();
@@ -16,23 +24,39 @@ const createMonthlyInvoices = async () => {
     }
 
     for (const tenant of tenants) {
-      const invoiceData = {
-        tenantID: tenant.tenantID,
-        periodID: period.periodID,
-        dateDue: new Date(currentYear, new Date().getMonth() + 1, 1).toISOString().slice(0, 10),
-        amountDue: tenant.negotiatedRent,
-        status: 'unpaid',
-        comment: `Rent for ${currentMonth} ${currentYear}`,
-      };
+      // Check if a rent invoice already exists for this tenant and period
+      const existingInvoice = await db('invoices')
+        .where({
+          tenantID: tenant.tenantID,
+          periodID: period.periodID,
+          invoiceTypeID: rentInvoiceType.invoiceTypeID
+        })
+        .first();
 
-      await db('invoices').insert(invoiceData);
+      if (!existingInvoice) {
+        const invoiceData = {
+          tenantID: tenant.tenantID,
+          periodID: period.periodID,
+          invoiceTypeID: rentInvoiceType.invoiceTypeID,
+          dateOfInvoice: new Date().toISOString().slice(0, 10),
+          dateDue: new Date(currentYear, new Date().getMonth() + 1, 1).toISOString().slice(0, 10),
+          amountDue: tenant.negotiatedRent,
+          status: 'unpaid',
+          comment: `Rent for ${currentMonth} ${currentYear}`,
+        };
+
+        await db('invoices').insert(invoiceData);
+        console.log(`Rent invoice created for tenant ${tenant.tenantID}`);
+      } else {
+        console.log(`Rent invoice already exists for tenant ${tenant.tenantID} for this period`);
+      }
     }
 
-    console.log('Invoices created successfully'); 
+    console.log('Rent invoices creation process completed'); 
   } catch (error) {
-    console.error('Error creating invoices:', error);
+    console.error('Error creating rent invoices:', error);
   }
 };
 
-// Scheduled so that they run at midnight on the 5th of every month
+// Scheduled to run at midnight on the 5th of every month
 cron.schedule('0 0 5 * *', createMonthlyInvoices);

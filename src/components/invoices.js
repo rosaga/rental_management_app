@@ -56,7 +56,7 @@ const Invoices = () => {
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/invoices/${invoiceID}`, { status: newStatus });
       console.log('Update response:', response.data);
-      fetchInvoices(); // Refresh the list
+      fetchInvoices(); 
     } catch (error) {
       console.error('Error updating invoice status:', error);
     }
@@ -66,6 +66,7 @@ const Invoices = () => {
   const columns = [
     { field: 'invoiceID', headerName: 'Invoice ID', width: 150 },
     { field: 'tenant_name', headerName: 'Tenant', width: 200 },
+    { field: 'invoiceType', headerName: 'Invoice Type', width: 200 },
     { field: 'amountDue', headerName: 'Amount Due', width: 150 },
     { field: 'dateOfInvoice', headerName: 'Date of Invoice', width: 200 },
     { field: 'dateDue', headerName: 'Date Due', width: 200 },

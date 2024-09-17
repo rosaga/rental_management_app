@@ -18,7 +18,6 @@ const CreateNewTenant = () => {
     email: '',
     ID_number: '',
     phone_number: '',
-    profession: '',
     houseNumber: houseID || '',
     dateAdmitted: null,
     negotiatedRent: '',
@@ -71,7 +70,6 @@ const CreateNewTenant = () => {
         email: '',
         ID_number: '',
         phone_number: '',
-        profession: '',
         houseNumber: '',
         dateAdmitted: null,
         negotiatedRent: '',
@@ -133,16 +131,7 @@ const CreateNewTenant = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                label="Profession"
-                name="profession"
-                fullWidth
-                value={formData.profession}
-                onChange={handleChange}
-              />
-            </Grid>
+           
             <Grid item xs={12}>
               <TextField
                 required

@@ -1,76 +1,76 @@
 const db = require('../db');
 
-const createInvoice = async (invoiceData) => {
+const createOtherInvoice = async (otherInvoiceData) => {
   try {
     // Check if the period already exists, otherwise insert it
     let period = await db('periods')
-      .where({ month: invoiceData.month, year: invoiceData.year })
+      .where({ month: otherInvoiceData.month, year: otherInvoiceData.year })
       .first();
 
     if (!period) {
       [period] = await db('periods')
-        .insert({ month: invoiceData.month, year: invoiceData.year })
+        .insert({ month: otherInvoiceData.month, year: otherInvoiceData.year })
         .returning('*');
     }
 
-    const newInvoice = await db('invoices')
+    const newOtherInvoice = await db('other_invoices')
       .insert({
-        tenantID: invoiceData.tenantID,
+        tenantID: otherInvoiceData.tenantID,
         periodID: period.periodID,
-        invoiceTypeID: invoiceData.invoiceTypeID, 
-        dateDue: invoiceData.dateDue,
-        amountDue: invoiceData.amountDue,
-        status: invoiceData.status || 'unpaid', 
-        comment: invoiceData.comment,
+        invoiceTypeID: otherInvoiceData.invoiceTypeID, 
+        dateDue: otherInvoiceData.dateDue,
+        amountDue: otherInvoiceData.amountDue,
+        status: otherInvoiceData.status || 'unpaid', 
+        comment: otherInvoiceData.comment,
       })
       .returning('*');
 
-    return newInvoice;
+    return newOtherInvoice;
   } catch (error) {
     throw error;
   }
 };
 
 
-const getAllInvoices = async (req, res) => {
+const getAllOtherInvoices = async (req, res) => {
   try {
     const { month, year } = req.query;
 
-    let query = db('invoices')
-      .join('tenants', 'invoices.tenantID', '=', 'tenants.tenantID')
+    let query = db('other_invoices')
+      .join('tenants', 'other_invoices.tenantID', '=', 'tenants.tenantID')
       .join('linkage', 'tenants.tenantID', '=', 'linkage.tenantID')
       .join('periods', 'linkage.periodID', '=', 'periods.periodID')
-      .join('invoice_types', 'invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID') 
+      .join('invoice_types', 'other_invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID') 
       .select(
-        'invoices.*',
+        'other_invoices.*',
         'tenants.tenant_name',
         'periods.month',
         'periods.year',
-        'invoice_types.invoiceType' 
+        'invoice_types.invoiceType as invoiceTypeName' 
       );
 
     if (month && year) {
       query = query.where({ 'periods.month': month, 'periods.year': year });
     }
 
-    const invoices = await query;
-    res.json(invoices);
+    const otherInvoices = await query;
+    res.json(otherInvoices);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch invoices' });
+    res.status(500).json({ error: 'Failed to fetch other invoices' });
   }
 };
 
 
 // Get invoice by ID
-const getInvoiceById = async (id) => {
+const getOtherInvoiceById = async (id) => {
   try {
-    const invoice = await db('invoices')
-      .where('invoiceID', id)
-      .join('invoice_types', 'invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID') 
-      .select('invoices.*', 'invoice_types.invoiceType as invoiceTypeName') 
+    const otherInvoice = await db('other_invoices')
+      .where('otherInvoiceID', id)
+      .join('invoice_types', 'other_invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID') 
+      .select('other_invoices.*', 'invoice_types.invoiceType as invoiceTypeName') 
       .first();
 
-    return invoice;
+    return otherInvoice;
   } catch (error) {
     throw error;
   }
@@ -78,15 +78,15 @@ const getInvoiceById = async (id) => {
 
 
 // Update invoice status and create payment if marked as paid
-const updateInvoice = async (id, updatedData) => {
+const updateOtherInvoice = async (id, updatedData) => {
   try {
-    const invoice = await db('invoices').where({ invoiceID: id }).first();
+    const otherInvoice = await db('other_invoices').where({ otherInvoiceID: id }).first();
 
-    if (updatedData.status === 'paid' && invoice.status !== 'paid') {
-      const tenant = await db('tenants').where({ tenantID: invoice.tenantID }).first();
+    if (updatedData.status === 'paid' && otherInvoice.status !== 'paid') {
+      const tenant = await db('tenants').where({ tenantID: otherInvoice.tenantID }).first();
 
       // Fetch the periodID from the invoice
-      const periodID = invoice.periodID;
+      const periodID = otherInvoice.periodID;
 
       // Calculate the balance
       const balance = invoice.amountDue - tenant.negotiatedRent;
@@ -127,9 +127,9 @@ const deleteInvoice = async (id) => {
 };
 
 module.exports = {
-  createInvoice,
-  getAllInvoices,
-  getInvoiceById,
+  createOtherInvoice,
+  getAllOtherInvoices,
+  getOtherInvoiceById,
   updateInvoice,
   deleteInvoice
 };

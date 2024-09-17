@@ -115,6 +115,18 @@ const relocateTenant = async (tenantID, newHouseID) => {
   try {
     const currentDate = new Date();
 
+    // First, get the current house number of the tenant
+    const currentTenant = await db('tenants')
+      .where({ tenantID: tenantID })
+      .select('houseNumber')
+      .first();
+
+    if (!currentTenant) {
+      throw new Error('Tenant not found');
+    }
+
+    const oldHouseID = currentTenant.houseNumber;
+
     // Update the tenant's house number and relocation date
     await db('tenants')
       .where({ tenantID: tenantID })
@@ -123,13 +135,19 @@ const relocateTenant = async (tenantID, newHouseID) => {
         date_of_relocation: currentDate,
       });
 
-    // Set the old house to 'Vacant' and the new house to 'Occupied'
-    const oldHouseID = await db('tenants').where({ tenantID: tenantID }).select('houseNumber').first();
-    await db('houses').where({ houseID: oldHouseID.houseNumber }).update({ house_status: 'Vacant' });
-    await db('houses').where({ houseID: newHouseID }).update({ house_status: 'Occupied' });
+    // Change old house to vacant
+    await db('houses')
+      .where({ houseID: oldHouseID })
+      .update({ house_status: 'Vacant' });
+
+    // Change new house to occupied
+    await db('houses')
+      .where({ houseID: newHouseID })
+      .update({ house_status: 'Occupied' });
 
     return { success: true };
   } catch (error) {
+    console.error('Error in relocateTenant:', error);
     throw error;
   }
 };

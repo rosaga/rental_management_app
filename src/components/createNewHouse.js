@@ -36,8 +36,8 @@ const CreateNewHouse = () => {
       rent_amount: rentAmount,
       apartmentID,
       house_status: houseStatus,
-      kiwascoAccountNo:kiwascoAccountNo,
-      kiwascoMeterNo:kiwascoMeterNo,
+      kiwasco_account_no:kiwascoAccountNo,
+      kiwasco_meter_no:kiwascoMeterNo,
       remarks:remarks
     };
 
