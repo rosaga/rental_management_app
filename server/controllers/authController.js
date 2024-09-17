@@ -4,13 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 
+// JWT secret
+const JWT_SECRET = process.env.JWT_SECRET; 
+
 const login = async (req, res) => {
   const { username, password } = req.body;
-
-  if (!process.env.JWT_SECRET) {
-    console.error('JWT_SECRET is not defined');
-    return res.status(500).json({ message: 'Server Error' });
-  }
 
   try {
     // Check if the user exists
@@ -33,9 +31,9 @@ const login = async (req, res) => {
       },
     };
 
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
-      res.json({ token, user});
+      res.json({ token, user });
     });
   } catch (error) {
     console.error(error.message);
@@ -69,7 +67,17 @@ const createUser = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await db('users').select('*');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   login,
-  createUser
+  createUser,
+  getAllUsers
 };

@@ -1,6 +1,7 @@
+// controllers/housesController.js
 const db = require('../db');
 
-// Create a new house
+// Create a house
 const createHouse = async (houseData) => {
   try {
     const newHouse = await db('houses').insert(houseData).returning('*');
@@ -20,37 +21,49 @@ const getAllHouses = async () => {
   }
 };
 
-// Get house by ID
-const getHouseById = async (id) => {
+// Get a house by ID
+const getHouseById = async (houseID) => {
   try {
-    const house = await db('houses').where({ id }).first();
+    const house = await db('houses').where({ houseID: houseID }).first();
     return house;
   } catch (error) {
     throw error;
   }
 };
 
-// Update house
-const updateHouse = async (id, updatedData) => {
+// Update a house
+const updateHouse = async (houseID, updatedData) => {
   try {
-    await db('houses').where({ id }).update(updatedData);
-    const updatedHouse = await getHouseById(id);
+    await db('houses').where({ houseID }).update(updatedData);
+    const updatedHouse = await getHouseById(houseID);
     return updatedHouse;
   } catch (error) {
     throw error;
   }
 };
 
-// Delete house
-const deleteHouse = async (id) => {
+// Delete a house
+const deleteHouse = async (houseID) => {
   try {
-    const deletedHouse = await getHouseById(id);
-    await db('houses').where({ id }).del();
+    const deletedHouse = await getHouseById(houseID);
+    await db('houses').where({ houseID: houseID }).del();
     return deletedHouse;
   } catch (error) {
     throw error;
   }
 };
+
+// get vacant houses
+const getVacantHouses = async () => {
+  try {
+    const vacantHouses = await db('houses').where({ house_status: 'Vacant' });
+    return vacantHouses;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
   createHouse,
@@ -58,4 +71,6 @@ module.exports = {
   getHouseById,
   updateHouse,
   deleteHouse,
+  getVacantHouses
+
 };
