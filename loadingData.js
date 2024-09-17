@@ -13,10 +13,8 @@ const loadingData = async () => {
     const apartments = [
       { name: 'A', location: 'Location A', num_houses: 9 },
       { name: 'B', location: 'Location B', num_houses: 6 },
-      { name: 'C', location: 'Location C', num_houses: 8 },
-      { name: 'D', location: 'Location D', num_houses: 6 },
-      { name: 'E', location: 'Location E', num_houses: 12 },
-      { name: 'Hotel', location: 'Location Hotel', num_houses: 1 }
+      { name: 'C', location: 'Location C', num_houses: 9 },
+      { name: 'D', location: 'Location D', num_houses: 4 }
     ];
 
     const apartmentIDs = {};
@@ -28,48 +26,34 @@ const loadingData = async () => {
 
     // Insert Houses
     const houses = [
-      { house_name: 'A1', rent_amount: 0, kiwasco_meter_no:16040986, kiwasco_account_no: 33000011014, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A2', rent_amount: 0,  kiwasco_meter_no: 16001531 ,kiwasco_account_no: 33000011011, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A3', rent_amount: 0, kiwasco_meter_no: 16040774 ,kiwasco_account_no: 33000011013, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A4', rent_amount: 0, kiwasco_meter_no: 16040985 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A5', rent_amount: 0, kiwasco_meter_no: 16040978 ,kiwasco_account_no: 33000011012, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A6', rent_amount: 0, kiwasco_meter_no: 16040984 ,kiwasco_account_no: 33000011010, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A7', rent_amount: 0, kiwasco_meter_no: 16040979 ,kiwasco_account_no: 33000011015, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A8', rent_amount: 0, kiwasco_meter_no: 16042256/16001531 ,kiwasco_account_no: 33000011011, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'A9', rent_amount: 0, kiwasco_meter_no: 16040986 ,kiwasco_account_no: 33000001062, apartmentID: apartmentIDs['A'], remarks: "" },
-      { house_name: 'B1', rent_amount: 0, kiwasco_meter_no: 16040909 ,kiwasco_account_no: 33000009994, apartmentID: apartmentIDs['B'], remarks: "" },
-      { house_name: 'B2', rent_amount: 0, kiwasco_meter_no: 15097734 ,kiwasco_account_no: 33000009996, apartmentID: apartmentIDs['B'], remarks: "" },
-      { house_name: 'B3', rent_amount: 0, kiwasco_meter_no: 15098674 ,kiwasco_account_no: 33000009995, apartmentID: apartmentIDs['B'], remarks: "" }, // vacant
-      { house_name: 'B4', rent_amount: 0, kiwasco_meter_no: 16027515 ,kiwasco_account_no: 33000009998, apartmentID: apartmentIDs['B'], remarks: "" }, // vacant
-      { house_name: 'B5', rent_amount: 0, kiwasco_meter_no: 16042086 ,kiwasco_account_no: 33000009997, apartmentID: apartmentIDs['B'], remarks: "" }, // vacant
-      { house_name: 'B6', rent_amount: 0, kiwasco_meter_no: 16041925 ,kiwasco_account_no: 33000009999, apartmentID: apartmentIDs['B'], remarks: "" },
-      { house_name: 'C1', rent_amount: 0, kiwasco_meter_no: 16063262 ,kiwasco_account_no: 43000016708, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C2', rent_amount: 0, kiwasco_meter_no: 16062965 ,kiwasco_account_no: 43000016712, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C4', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 43000016713, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C5', rent_amount: 0, kiwasco_meter_no: 16062960 ,kiwasco_account_no: 43000016707, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C6', rent_amount: 0, kiwasco_meter_no: 16062962 ,kiwasco_account_no: 43000016706, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C7', rent_amount: 0, kiwasco_meter_no: 16062964 ,kiwasco_account_no: 43000016714, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C8', rent_amount: 0, kiwasco_meter_no: 16062964 ,kiwasco_account_no: 43000016715, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'C9', rent_amount: 0, kiwasco_meter_no: 16063258 ,kiwasco_account_no: 43000016709, apartmentID: apartmentIDs['C'], remarks: "" },
-      { house_name: 'D1', rent_amount: 0, kiwasco_meter_no: 16027224 ,kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'D2', rent_amount: 0, kiwasco_meter_no: 16027224 ,kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'D3', rent_amount: 0, kiwasco_meter_no: 16027224 ,kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'D4', rent_amount: 0, kiwasco_meter_no: 16027224 ,kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'D5', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 33000010082, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'D10', rent_amount: 0, kiwasco_meter_no: 16063257 ,kiwasco_account_no: 43000016711, apartmentID: apartmentIDs['D'], remarks: "" },
-      { house_name: 'HOTEL', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 43000015752, apartmentID: apartmentIDs['Hotel'], remarks: "" },
-      { house_name: 'E1', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" },
-      { house_name: 'E2', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E3', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E4', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E5', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" },
-      { house_name: 'E6', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E7', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" },
-      { house_name: 'E8', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" },
-      { house_name: 'E9', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E10', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E11', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }, // vacant
-      { house_name: 'E12', rent_amount: 0, kiwasco_meter_no: 0 ,kiwasco_account_no: 0, apartmentID: apartmentIDs['E'], remarks: "" }
+      { house_name: 'A1', rent_amount: 6500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A2', rent_amount: 7500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A3', rent_amount: 7500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A4', rent_amount: 7500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A5', rent_amount: 7500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A6', rent_amount: 6500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A7', rent_amount: 6500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A8', rent_amount: 17000, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'A9', rent_amount: 7500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['A'], remarks: "" },
+      { house_name: 'B1', rent_amount: 10500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'B2', rent_amount: 12000, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'B3', rent_amount: 10500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'B4', rent_amount: 12500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'B5', rent_amount: 10500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'B6', rent_amount: 12500, kiwasco_meter_no: 0, kiwasco_account_no: 0, apartmentID: apartmentIDs['B'], remarks: "" },
+      { house_name: 'C1', rent_amount: 30000, kiwasco_meter_no: 16063262, kiwasco_account_no: 43000016708, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C2', rent_amount: 11000, kiwasco_meter_no: 16062965, kiwasco_account_no: 43000016712, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C3', rent_amount: 15000, kiwasco_meter_no: 16062957, kiwasco_account_no: 43000016713, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C4', rent_amount: 12000, kiwasco_meter_no: 16062959, kiwasco_account_no: 0, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C5', rent_amount: 10000, kiwasco_meter_no: 16062960, kiwasco_account_no: 43000016707, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C6', rent_amount: 15000, kiwasco_meter_no: 16062962, kiwasco_account_no: 0, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C7', rent_amount: 15000, kiwasco_meter_no: 16062964, kiwasco_account_no: 43000016714, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C8', rent_amount: 13000, kiwasco_meter_no: 16063264, kiwasco_account_no: 43000016715, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'C9', rent_amount: 14000, kiwasco_meter_no: 16063258, kiwasco_account_no: 0, apartmentID: apartmentIDs['C'], remarks: "" },
+      { house_name: 'D1', rent_amount: 6500, kiwasco_meter_no: 16027224, kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
+      { house_name: 'D2', rent_amount: 6500, kiwasco_meter_no: 16027224, kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
+      { house_name: 'D3', rent_amount: 6500, kiwasco_meter_no: 16027224, kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" },
+      { house_name: 'D4', rent_amount: 6500, kiwasco_meter_no: 16027224, kiwasco_account_no: 43000016624, apartmentID: apartmentIDs['D'], remarks: "" }
     ];
 
     const houseIDs = {};
@@ -81,7 +65,7 @@ const loadingData = async () => {
           house.house_name,
           1,  
           house.rent_amount,
-          house.rent_amount > 0 ? 'Occupied' : 'Vacant',
+          'Vacant',
           house.kiwasco_meter_no,
           house.kiwasco_account_no,
           house.apartmentID,
