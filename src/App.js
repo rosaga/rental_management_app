@@ -21,6 +21,9 @@ import { Box, Toolbar } from '@mui/material';
 import CreateNewPayment from './components/createNewPayment';
 import EditHouse from './components/editHouse';
 import EditTenant from './components/editTenant';
+import CreateNewInvoiceType from './components/createNewInvoiceType';
+import InvoiceTypes from './components/invoiceTypes';
+import EditInvoiceType from './components/editInvoiceType';
 
 const AppContent = () => {
   const location = useLocation();
@@ -48,6 +51,12 @@ const AppContent = () => {
           <Route path="/createNewPayment" element={<CreateNewPayment />} />
           <Route path="/edit-house/:houseID" element={<EditHouse />} />
           <Route path="/edit-tenant/:tenantID" element={<EditTenant />} />
+          <Route path="/createNewInvoiceType" element={<CreateNewInvoiceType />} />
+          <Route path="/invoiceTypes" element={<InvoiceTypes />} />
+          <Route path="/edit-invoice-type/:invoiceTypeID" element={<EditInvoiceType />} />
+
+
+
 
 
           {/* Add other routes here */}

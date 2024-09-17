@@ -17,6 +17,7 @@ const Navigation = () => {
     houses: false,
     tenants: false,
     invoices: false,
+    invoiceTypes: false,
     payments: false
   });
 
@@ -114,6 +115,24 @@ const Navigation = () => {
               </List>
             </Collapse>
 
+            <ListItem button onClick={() => handleClick('invoiceTypes')}>
+              <ListItemIcon sx={{ color: 'white' }}><Receipt /></ListItemIcon>
+              <ListItemText primary="Invoice Types" />
+              {open.invoiceTypes ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={open.invoiceTypes} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+                <ListItem button component={Link} to="/invoiceTypes">
+                  <ListItemIcon><ListIcon /></ListItemIcon>
+                  <ListItemText primary="View Invoice Types" />
+                </ListItem>
+                <ListItem button component={Link} to="/createNewInvoiceType">
+                  <ListItemIcon><Add /></ListItemIcon>
+                  <ListItemText primary="Add Invoice Type" />
+                </ListItem>
+              </List>
+            </Collapse>
+
             <ListItem button onClick={() => handleClick('invoices')}>
               <ListItemIcon sx={{ color: 'white' }}><Receipt /></ListItemIcon>
               <ListItemText primary="Invoices" />
@@ -131,6 +150,8 @@ const Navigation = () => {
                 </ListItem>
               </List>
             </Collapse>
+            
+
 
             <ListItem button onClick={() => handleClick('payments')}>
               <ListItemIcon sx={{ color: 'white' }}><Payment /></ListItemIcon>

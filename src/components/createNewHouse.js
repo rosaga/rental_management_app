@@ -10,6 +10,9 @@ const CreateNewHouse = () => {
   const [apartmentID, setApartmentID] = useState('');
   const [houseStatus, setHouseStatus] = useState('Vacant');
   const [apartments, setApartments] = useState([]);
+  const [kiwascoAccountNo, setKiwascoAccountNo] = useState('');
+  const [kiwascoMeterNo, setKiwascoMeterNo] = useState('');
+  const [remarks, setRemarks] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -33,6 +36,9 @@ const CreateNewHouse = () => {
       rent_amount: rentAmount,
       apartmentID,
       house_status: houseStatus,
+      kiwasco_account_no:kiwascoAccountNo,
+      kiwasco_meter_no:kiwascoMeterNo,
+      remarks:remarks
     };
 
     try {
@@ -45,6 +51,9 @@ const CreateNewHouse = () => {
       setRentAmount('');
       setApartmentID('');
       setHouseStatus('Vacant');
+      setKiwascoAccountNo('');
+      setKiwascoMeterNo('');
+      setRemarks('');
     } catch (error) {
       console.error('Error adding house:', error);
     }
@@ -80,6 +89,29 @@ const CreateNewHouse = () => {
             value={rentAmount}
             onChange={(e) => setRentAmount(e.target.value)}
             required
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Kiwasco Account Number"
+            value={kiwascoAccountNo}
+            onChange={(e) => setKiwascoAccountNo(e.target.value)}
+            required
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Kiwasco Meter Number"
+            value={kiwascoMeterNo}
+            onChange={(e) => setKiwascoMeterNo(e.target.value)}
+            required
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Remarks"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
             margin="normal"
           />
           <Select

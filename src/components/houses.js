@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const Houses = () => {
   const [houses, setHouses] = useState([]);
+  const [apartments, setApartments] = useState([])
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -16,8 +17,12 @@ const Houses = () => {
       try {
         const response = await axios.get(`${apiUrl}/api/houses`);
         setHouses(response.data);
+
+        const apartmentResponse = await axios.get(`${apiUrl}/api/apartments`)
+        setApartments(apartmentResponse.data)
+
       } catch (error) {
-        console.error('Error fetching houses:', error);
+        console.error('Error fetching houses or apartments:', error);
       }
     };
 
@@ -29,7 +34,8 @@ const Houses = () => {
     { field: 'house_name', headerName: 'House Name', width: 150 },
     { field: 'number_of_rooms', headerName: 'No. of rooms', width: 130 },
     { field: 'rent_amount', headerName: 'Rent Amount', width: 130 },
-    { field: 'location', headerName: 'Location', width: 150 },
+    { field: 'kiwasco_meter_no', headerName: 'Kiwasco Meter No', width: 150 },
+    { field: 'kiwasco_account_no', headerName: 'Kiwasco Account No', width: 150 },
     { field: 'house_status', headerName: 'House Status', width: 130 },
     {
       field: 'actions',

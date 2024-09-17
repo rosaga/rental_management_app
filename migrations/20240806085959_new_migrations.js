@@ -20,6 +20,11 @@ exports.up = function (knex) {
       table.decimal('rent_amount', 10, 2).notNullable();
       table.string('house_status', 50).notNullable().defaultTo('Vacant');
       table.integer('apartmentID').unsigned().notNullable();
+      table.bigInteger('kiwasco_meter_no').notNullable().defaultTo(null);
+      table.bigInteger('kiwasco_account_no').notNullable().defaultTo(null);
+      table.string('remarks').notNullable().defaultTo(null);
+
+
       table.foreign('apartmentID').references('apartmentID').inTable('apartments').onDelete('CASCADE');
     })
     .createTable('periods', function (table) {
@@ -33,14 +38,18 @@ exports.up = function (knex) {
       table.string('tenant_name').notNullable();
       table.string('email').notNullable();
       table.integer('ID_number').notNullable();
-      table.string('profession').notNullable();
       table.string('phone_number').notNullable();
-
       table.string('agreement_file').defaultTo(null);
+      table.string('remarks').defaultTo(null);
       table.timestamp('dateAdmitted').defaultTo(null);
-      table.integer('account').notNullable().defaultTo(0);
+      table.timestamp('date_of_relocation').nullable();
+      table.timestamp('date_of_removal').nullable();
       table.integer('negotiatedRent').notNullable().defaultTo(0);
       table.boolean('status').notNullable().defaultTo(true);
+    })
+    .createTable('invoice_types', function(table) {
+      table.increments('invoiceTypeID').primary();
+      table.string('invoiceType', 255).notNullable();
     })
     .createTable('invoices', function (table) {
       table.increments('invoiceID').primary();
@@ -48,6 +57,8 @@ exports.up = function (knex) {
       table.integer('periodID').unsigned().notNullable();
       table.foreign('periodID').references('periodID').inTable('periods').onDelete('CASCADE');
       table.timestamp('dateOfInvoice').defaultTo(knex.fn.now()).notNullable();
+      table.integer('invoiceTypeID').unsigned().notNullable()
+      table.foreign('invoiceTypeID').references('invoiceTypeID').inTable('invoice_types').onDelete('CASCADE');
       table.timestamp('dateDue').notNullable();
       table.integer('amountDue').notNullable();
       table.string('status', 50).notNullable().defaultTo('unpaid');
@@ -95,6 +106,7 @@ exports.down = function (knex) {
     .dropTableIfExists('transactions')
     .dropTableIfExists('payments')
     .dropTableIfExists('locations')
+    .dropTableIfExists('invoice_types')
     .dropTableIfExists('invoices')
     .dropTableIfExists('houses')
     .dropTableIfExists('tenants')

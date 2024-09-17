@@ -9,6 +9,7 @@ const rentPaymentsController = require('./controllers/rentPaymentsController');
 const contactsController = require('./controllers/contactsController');
 const invoicesController = require('./controllers/invoicesController');
 const paymentsController = require('./controllers/rentPaymentsController');
+const invoiceTypeController = require('./controllers/invoiceTypeController')
 // const transactionsController = require('./controllers/transactionsController');
 // const locationsController = require('./controllers/locationsController');
 
@@ -314,6 +315,58 @@ router.delete('/contacts/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+//invoice types routes
+router.post('/invoice_types', async (req, res) => {
+  try {
+    const newInvoiceType = await invoiceTypeController.createNewInvoiceType(req.body)
+    res.json(newInvoiceType)
+  } catch (error){
+    res.status(500).json({ error: error.message})
+  }
+})
+
+router.get('/invoice_types', async (req, res) => {
+  try{
+    const invoiceTypes = await invoiceTypeController.getAllInvoiceTypes(req.body)
+    res.json(invoiceTypes)
+  } catch (error){
+    res.status(500).json({ error: error.message})
+  }
+})
+
+router.get('/invoice_type/:invoiceTypeID', async (req, res) => {
+  try{
+    const invoiceType = await invoiceTypeController.getInvoiceTypeByID(req.params.invoiceTypeID);
+    if (!invoiceType) {
+      return res.status(404).json({ message: 'Invoice type not found' });
+    }
+    res.json(invoiceType);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
+
+router.put('/invoice_type/:invoiceTypeID', async (req, res) => {
+  try{
+  const updatedInvoiceType = await invoiceTypeController.updateInvoiceType(req.params.invoiceTypeID, req.body)
+  res.json(updatedInvoiceType)
+  } catch (error)  {
+    res.status(500).json({ error: error.message})
+  }
+
+})
+
+router.delete('/invoice_type/:invoiceTypeID', async (req, res) => {
+
+  try{
+  const deletedInvoiceType = await invoicesController.deleteInvoice(req.body)
+  res.json(deletedInvoiceType)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  
+})
 
 // Invoices routes
 router.post('/invoices', async (req, res) => {
