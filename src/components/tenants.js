@@ -31,7 +31,6 @@ const Tenants = () => {
     { field: 'house_name', headerName: 'House', width: 150 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'ID_number', headerName: 'ID No.', width: 130 },
-    { field: 'profession', headerName: 'Profession', width: 150 },
     { field: 'phone_number', headerName: 'Phone Number', width: 150 },
     { field: 'rent_amount', headerName: 'Rent', width: 100 },
     { field: 'dateAdmitted', headerName: 'Admission Date', width: 150 },

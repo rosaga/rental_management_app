@@ -11,25 +11,32 @@ const CreateInvoice = () => {
     comment: '',
     month: '',
     year: '',
+    invoiceTypeID: ''
   });
 
   const [tenants, setTenants] = useState([]);
+  const [invoiceTypes, setInvoiceTypes] = useState([])
   const [error, setError] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
+  //fetch tenants
   useEffect(() => {
-    const fetchTenants = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/tenants`);
-        setTenants(response.data);
+        const tenantsResponse = await axios.get(`${apiUrl}/api/tenants`);
+        setTenants(tenantsResponse.data);
+
+        const invoiceTypesResponse = await axios.get(`${apiUrl}/api/invoice_types`)
+        setInvoiceTypes(invoiceTypesResponse.data)
+
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
       }
     };
 
-    fetchTenants();
-  }, []);
+    fetchData();
+  }, [apiUrl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +62,7 @@ const CreateInvoice = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/invoices`, formData);
+      await axios.post(`${apiUrl}/api/invoices`, formData);
       alert('Invoice created successfully');
       setFormData({
         tenantID: '',
@@ -64,11 +71,14 @@ const CreateInvoice = () => {
         comment: '',
         month: '',
         year: '',
+        invoiceTypeID: ''
       });
     } catch (err) {
       setError(err.response ? err.response.data.error : 'An error occurred');
     }
+
   };
+
 
   return (
     <Box sx={{ display: 'flex', marginTop: '-100px'}}>
@@ -97,6 +107,25 @@ const CreateInvoice = () => {
                 ))}
               </TextField>
             </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                required
+                select
+                label="Choose invoice type"
+                name="invoiceTypeID"
+                fullWidth
+                value={formData.invoiceTypeID}
+                onChange={handleChange}
+              >
+                {invoiceTypes.map((invoice_type) => (
+                  <MenuItem key={invoice_type.invoiceTypeID} value={invoice_type.invoiceTypeID}>
+                    {invoice_type.invoiceType}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 required
