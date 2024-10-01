@@ -24,6 +24,11 @@ import EditTenant from './components/editTenant';
 import CreateNewInvoiceType from './components/createNewInvoiceType';
 import InvoiceTypes from './components/invoiceTypes';
 import EditInvoiceType from './components/editInvoiceType';
+import Reports from './components/reports';
+import TotalCollections from './components/totalCollections';
+import PendingInvoices from './components/pendingInvoices';
+import TenantBalances from './components/tenantBalances';
+import RentableUnits from './components/rentableUnits';
 
 const AppContent = () => {
   const location = useLocation();
@@ -54,6 +59,19 @@ const AppContent = () => {
           <Route path="/createNewInvoiceType" element={<CreateNewInvoiceType />} />
           <Route path="/invoiceTypes" element={<InvoiceTypes />} />
           <Route path="/edit-invoice-type/:invoiceTypeID" element={<EditInvoiceType />} />
+          <Route path="/reports" element={<Reports/>} />
+          <Route path="/total-collections" element={<TotalCollections/>}  />
+          <Route path="/pending-invoices" element={<PendingInvoices/>} />
+          <Route path="/balances" element={<TenantBalances/>} />
+          <Route path="/rentable-units" element={<RentableUnits/>} 
+
+
+
+
+          
+
+
+          />
 
 
 

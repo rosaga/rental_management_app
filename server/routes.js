@@ -20,29 +20,32 @@ router.post('/login', authController.login);
 //dashboard route
 router.get('/dashboard', async (req, res) => {
   try {
+    // Count all houses, tenants, payments, and vacant houses
     const houses = await db('houses').count('houseID as count').first();
     const tenants = await db('tenants').count('tenantID as count').first();
-    const invoices = await db('invoices').count('invoiceID as count').first();
     const payments = await db('payments').count('paymentID as count').first();
     const rentCollected = await db('payments').sum('amountPaid as total').first();
-    const tenantBalances = await db('invoices').where('status', 'unpaid').sum('amountDue as total').first();
     const rentableUnits = await db('houses').where('house_status', 'Vacant').count('houseID as count').first();
+    
+    // Count unpaid invoices and sum of unpaid balances
+    const unpaidInvoices = await db('invoices').where('status', 'unpaid').count('invoiceID as count').first();
+    const tenantBalances = await db('invoices').where('status', 'unpaid').sum('amountDue as total').first();
 
     res.json({
       houses: houses.count,
       tenants: tenants.count,
-      invoices: invoices.count,
       payments: payments.count,
-      rentCollected: rentCollected.total || 0,
-      tenantBalances: tenantBalances.total || 0,
-      rentableUnits: rentableUnits.count,
-      unpaidInvoices: invoices.count,
+      rentCollected: rentCollected.total || 0, // Total rent collected
+      tenantBalances: tenantBalances.total || 0, // Total unpaid balances
+      rentableUnits: rentableUnits.count, // Vacant houses
+      unpaidInvoices: unpaidInvoices.count, // Total unpaid invoices
     });
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
     res.status(500).json({ error: 'Failed to fetch dashboard data' });
   }
 });
+
 
 
 // Create User
@@ -168,6 +171,29 @@ router.delete('/houses/:houseID', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.get('/rentable_units', async (req, res) => {
+  try {
+    const rentableUnits = await db('houses')
+      .join('apartments', 'houses.apartmentID', '=', 'apartments.apartmentID') 
+      .select(
+        'houses.house_name',
+        'houses.rent_amount',
+        'houses.kiwasco_meter_no',
+        'houses.kiwasco_account_no',
+        'apartments.name',
+        'houses.house_status'
+      )
+      .where('houses.house_status', 'Vacant');
+
+    res.json(rentableUnits);
+  } catch (error) {
+    console.error('Error fetching rentable units:', error);
+    res.status(500).json({ error: 'Failed to fetch rentable units' });
+  }
+});
+
+
 
 // routes/tenants.js
 router.put('/removeTenant/:tenantID', async (req, res) => {
@@ -436,6 +462,34 @@ router.delete('/invoices/:id', async (req, res) => {
     }
   });
 
+  router.get('/pending_invoices', async (req, res) => {
+    try {
+      const pendingInvoices = await db('invoices')
+        .join('tenants', 'invoices.tenantID', '=', 'tenants.tenantID')
+        .join('houses', 'tenants.houseNumber', '=', 'houses.houseID')
+        .join('periods', 'invoices.periodID', '=', 'periods.periodID')
+        .join('invoice_types', 'invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID')
+        .select(
+          'invoices.invoiceID',
+          'invoices.amountDue',
+          'tenants.tenant_name',
+          'houses.house_name',
+          'periods.month',
+          'periods.year',
+          'invoice_types.invoiceType as invoiceTypeName',
+          'invoices.status'
+        )
+        .where('invoices.status', 'unpaid'); 
+  
+      res.json(pendingInvoices);
+    } catch (error) {
+      console.error('Error fetching pending invoices:', error);
+      res.status(500).json({ error: 'Failed to fetch pending invoices' });
+    }
+  });
+  
+
+
   // Payments routes
   router.post('/payments', async (req, res) => {
     try {
@@ -448,12 +502,25 @@ router.delete('/invoices/:id', async (req, res) => {
   
   router.get('/payments', async (req, res) => {
     try {
-      const payments = await paymentsController.getAllPayments();
+      const payments = await db('payments')
+        .join('tenants', 'payments.tenantID', '=', 'tenants.tenantID')
+        .join('houses', 'tenants.houseNumber', '=', 'houses.houseID')
+        .join('invoices', 'payments.invoiceID', '=', 'invoices.invoiceID')
+        .join('periods', 'invoices.periodID', '=', 'periods.periodID')
+        .select(
+          'payments.amountPaid',
+          'tenants.tenant_name',
+          'houses.house_name',
+          'invoices.invoiceID',
+          'periods.month',
+          'periods.year'
+        );
       res.json(payments);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: 'Failed to fetch payments' });
     }
   });
+  
   
   router.get('/payments/:id', async (req, res) => {
     try {
@@ -484,6 +551,33 @@ router.delete('/invoices/:id', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+// tenant balances
+router.get('/tenant_balances', async (req, res) => {
+  try {
+    const tenantBalances = await db('invoices')
+      .join('tenants', 'invoices.tenantID', '=', 'tenants.tenantID')
+      .join('houses', 'tenants.houseNumber', '=', 'houses.houseID')
+      .join('invoice_types', 'invoices.invoiceTypeID', '=', 'invoice_types.invoiceTypeID')
+      .join('periods', 'invoices.periodID', '=', 'periods.periodID') 
+      .select(
+        'tenants.tenant_name',
+        'houses.house_name',
+        'invoice_types.invoiceType',  
+        'invoices.amountDue',         
+        'periods.month',              
+        'periods.year'                
+      )
+      .where('invoices.status', 'unpaid'); 
+
+    res.json(tenantBalances);
+  } catch (error) {
+    console.error('Error fetching tenant balances:', error);
+    res.status(500).json({ error: 'Failed to fetch tenant balances' });
+  }
+});
+
+
   
 
 // Locations routes
