@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Typography, Box, Grid, Button, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Typography, Box, Grid, Button, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination } from '@mui/material';
 import { House, People, Receipt, Payment } from '@mui/icons-material';
 
 const Dashboard = () => {
@@ -17,8 +17,12 @@ const Dashboard = () => {
   });
 
 
+  const navigate = useNavigate();
+
   const [invoices, setInvoices] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [page, setPage] = useState(0); 
+  const [rowsPerPage, setRowsPerPage] = useState(30);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -44,6 +48,15 @@ const Dashboard = () => {
 
     fetchDashboardData();
   }, [apiUrl]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -159,37 +172,41 @@ const Dashboard = () => {
       </Grid>
 
       <Grid container spacing={3} sx={{ marginTop: '10px' }}>
-        <Grid item xs={3}>
+
+        <Grid item xs={3} onClick={() => navigate('/total-collections')}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Total Collections</Typography>
             <Typography variant="h4">{dashboardData.rentCollected || 0}</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+
+        <Grid item xs={3} onClick={() => navigate('/pending-invoices')}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Pending Invoices</Typography>
             <Typography variant="h4">{dashboardData.unpaidInvoices || 0}</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+
+        <Grid item xs={3} onClick={() => navigate('/balances')}>
           <Paper elevation={3} sx={{ padding: '20px' }}>
             <Typography variant="h6">Tenant Balances</Typography>
             <Typography variant="h4">{dashboardData.tenantBalances || 0}</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={3} sx={{ padding: '20px' }}>
-            <Typography variant="h6">Rentable Units</Typography>
-
-            <Typography variant="h4">{dashboardData.rentableUnits}</Typography>
-          </Paper>
+      
+        <Grid item xs={3} onClick={() => navigate('/rentable-units')}>
+            <Paper elevation={3} sx={{ padding: '20px' }}>
+              <Typography variant="h6">Rentable Units</Typography>
+              <Typography variant="h4">{dashboardData.rentableUnits}</Typography>
+            </Paper>
         </Grid>
+
       </Grid>
 
       <Box sx={{ marginTop: '20px' }}>
         <Typography variant="h6" gutterBottom>Invoices</Typography>
-        <TableContainer component={Paper}>
-          <Table>
+        <TableContainer component={Paper} sx={{ maxHeight: 340 }}> 
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell>Tenant Name</TableCell>
@@ -204,7 +221,7 @@ const Dashboard = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoices.map((invoice) => (
+              {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((invoice) => (
                 <TableRow key={invoice.invoiceID}>
                   <TableCell>{invoice.tenant_name}</TableCell>
                   <TableCell>{invoice.phone_number}</TableCell>
@@ -218,6 +235,19 @@ const Dashboard = () => {
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[10, 30, 50, 100]}
+                  count={invoices.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  labelDisplayedRows={({ from, to, count }) => `${from}–${to} of ${count}`}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Box>
