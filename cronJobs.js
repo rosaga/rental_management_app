@@ -59,4 +59,5 @@ const createMonthlyInvoices = async () => {
 };
 
 // Scheduled to run at midnight on the 5th of every month
+
 //cron.schedule('0 0 1 * *', createMonthlyInvoices);

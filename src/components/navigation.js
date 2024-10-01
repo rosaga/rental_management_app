@@ -4,7 +4,7 @@ import {
   Toolbar, AppBar, Typography, Button, Box, Collapse
 } from '@mui/material';
 import {
-  Home, People, Receipt, Payment, LocationOn, ExpandLess, ExpandMore, Add, List as ListIcon,
+  Home, People, Receipt, Payment, TableView, ExpandLess, ExpandMore, Add, List as ListIcon,
   ExitToApp, Apartment, House
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
@@ -171,11 +171,13 @@ const Navigation = () => {
               </List>
             </Collapse>
 
-            <ListItem button component={Link} to="/locations">
-              <ListItemIcon sx={{ color: 'white' }}> <LocationOn /></ListItemIcon>
-              <ListItemText primary="Locations" />
+            <ListItem button component={Link} to="/reports">
+              <ListItemIcon sx={{ color: 'white' }}> <TableView /></ListItemIcon>
+              <ListItemText primary="Reports" />
             </ListItem>
+            
           </List>
+          
           <Box sx={{ padding: '20px' }}>
             <Button
               variant="contained"

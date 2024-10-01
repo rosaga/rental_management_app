@@ -15,21 +15,20 @@ const CreateInvoice = () => {
   });
 
   const [tenants, setTenants] = useState([]);
-  const [invoiceTypes, setInvoiceTypes] = useState([])
+  const [invoiceTypes, setInvoiceTypes] = useState([]);
   const [error, setError] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-  //fetch tenants
+  // Fetch tenants and invoice types when the component is mounted
   useEffect(() => {
     const fetchData = async () => {
       try {
         const tenantsResponse = await axios.get(`${apiUrl}/api/tenants`);
         setTenants(tenantsResponse.data);
 
-        const invoiceTypesResponse = await axios.get(`${apiUrl}/api/invoice_types`)
-        setInvoiceTypes(invoiceTypesResponse.data)
-
+        const invoiceTypesResponse = await axios.get(`${apiUrl}/api/invoice_types`);
+        setInvoiceTypes(invoiceTypesResponse.data);
       } catch (err) {
         setError(err.response ? err.response.data.error : 'An error occurred');
       }
@@ -38,6 +37,7 @@ const CreateInvoice = () => {
     fetchData();
   }, [apiUrl]);
 
+  // Handle form input changes and update state
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -59,11 +59,15 @@ const CreateInvoice = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Submit form data
       await axios.post(`${apiUrl}/api/invoices`, formData);
       alert('Invoice created successfully');
+      
+      // Reset form
       setFormData({
         tenantID: '',
         dateDue: '',
@@ -76,9 +80,7 @@ const CreateInvoice = () => {
     } catch (err) {
       setError(err.response ? err.response.data.error : 'An error occurred');
     }
-
   };
-
 
   return (
     <Box sx={{ display: 'flex', marginTop: '-100px'}}>
@@ -90,6 +92,7 @@ const CreateInvoice = () => {
         {error && <Typography color="error">{error}</Typography>}
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
+            {/* Select Tenant */}
             <Grid item xs={12}>
               <TextField
                 required
@@ -108,24 +111,26 @@ const CreateInvoice = () => {
               </TextField>
             </Grid>
 
+            {/* Select Invoice Type */}
             <Grid item xs={12}>
               <TextField
                 required
                 select
-                label="Choose invoice type"
+                label="Choose Invoice Type"
                 name="invoiceTypeID"
                 fullWidth
                 value={formData.invoiceTypeID}
                 onChange={handleChange}
               >
-                {invoiceTypes.map((invoice_type) => (
-                  <MenuItem key={invoice_type.invoiceTypeID} value={invoice_type.invoiceTypeID}>
-                    {invoice_type.invoiceType}
+                {invoiceTypes.map((invoiceType) => (
+                  <MenuItem key={invoiceType.invoiceTypeID} value={invoiceType.invoiceTypeID}>
+                    {invoiceType.invoiceType}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
 
+            {/* Amount Due */}
             <Grid item xs={12}>
               <TextField
                 required
@@ -137,6 +142,8 @@ const CreateInvoice = () => {
                 onChange={handleChange}
               />
             </Grid>
+
+            {/* Date Due */}
             <Grid item xs={12}>
               <TextField
                 required
@@ -149,6 +156,8 @@ const CreateInvoice = () => {
                 onChange={handleChange}
               />
             </Grid>
+
+            {/* Comment */}
             <Grid item xs={12}>
               <TextField
                 required
@@ -161,6 +170,8 @@ const CreateInvoice = () => {
                 onChange={handleChange}
               />
             </Grid>
+
+            {/* Submit Button */}
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Add Invoice
