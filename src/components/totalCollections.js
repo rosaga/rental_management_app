@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Box, Typography, Button, Grid } from '@mui/material';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { jsPDF } from 'jspdf';
@@ -68,8 +69,16 @@ const TotalCollections = () => {
     doc.save('total_collections.pdf');
   };
 
+  const columns = [
+    { field: 'tenant_name', headerName: 'Tenant Name', width: 150 },
+    { field: 'house_name', headerName: 'House Number', width: 150 },
+    { field: 'invoiceID', headerName: 'Invoice', width: 100 },
+    { field: 'period', headerName: 'Period', width: 150, valueGetter: (params) => `${params.row.month} ${params.row.year}` },
+    { field: 'amountPaid', headerName: 'Amount Paid', width: 150 },
+  ];
+
   return (
-    <Container sx={{ marginTop: '50px' }}>
+    <Box sx={{ marginTop: '50px', padding: '20px' }}>
       <Typography variant="h4" gutterBottom>
         Total Collections
       </Typography>
@@ -93,35 +102,20 @@ const TotalCollections = () => {
         </Grid>
       </Grid>
 
-      {loading ? (
-        <Typography>Loading payments...</Typography>
-      ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>Tenant Name</strong></TableCell>
-                <TableCell><strong>House Number</strong></TableCell>
-                <TableCell><strong>Invoice</strong></TableCell>
-                <TableCell><strong>Period</strong></TableCell>
-                <TableCell><strong>Amount Paid</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {payments.map((payment, index) => (
-                <TableRow key={index}>
-                  <TableCell>{payment.tenant_name}</TableCell>
-                  <TableCell>{payment.house_name}</TableCell>
-                  <TableCell>{payment.invoiceID}</TableCell>
-                  <TableCell>{`${payment.month} ${payment.year}`}</TableCell>
-                  <TableCell>{payment.amountPaid}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Container>
+      {/* DataGrid for payments */}
+      <Box sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={payments}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
+          checkboxSelection
+          getRowId={(row) => row.invoiceID}
+          components={{ Toolbar: GridToolbar }}
+          loading={loading}
+        />
+      </Box>
+    </Box>
   );
 };
 
