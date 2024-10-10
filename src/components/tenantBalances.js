@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Container, Button, Grid } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Typography, Container, Button, Grid, Box } from '@mui/material';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { jsPDF } from 'jspdf';
@@ -64,6 +65,15 @@ const TenantBalances = () => {
     doc.save('tenant_balances.pdf');
   };
 
+  const columns = [
+    { field: 'tenant_name', headerName: 'Tenant Name', width: 200 },
+    { field: 'house_name', headerName: 'House Number', width: 150 },
+    { field: 'invoiceTypeName', headerName: 'Invoice Type', width: 200 },
+    { field: 'amountDue', headerName: 'Amount Due', width: 150 },
+    { field: 'month', headerName: 'Month', width: 100 },
+    { field: 'year', headerName: 'Year', width: 100 },
+  ];
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -89,30 +99,17 @@ const TenantBalances = () => {
         </Grid>
       </Grid>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Tenant Name</TableCell>
-              <TableCell>House Number</TableCell>
-              <TableCell>Invoice Type</TableCell>
-              <TableCell>Amount Due</TableCell>
-              <TableCell>Period</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tenantBalances.map((balance, index) => (
-              <TableRow key={index}>
-                <TableCell>{balance.tenant_name}</TableCell>
-                <TableCell>{balance.house_name}</TableCell>
-                <TableCell>{balance.invoiceTypeName}</TableCell>
-                <TableCell>{balance.amountDue}</TableCell>
-                <TableCell>{balance.month} {balance.year}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={tenantBalances}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
+          checkboxSelection
+          getRowId={(row) => `${row.tenant_name}-${row.house_name}-${row.invoiceTypeName}`}
+          components={{ Toolbar: GridToolbar }}
+        />
+      </Box>
     </Container>
   );
 };

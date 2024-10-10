@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Box, Typography, Button, Grid } from '@mui/material';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { jsPDF } from 'jspdf';
@@ -11,6 +12,10 @@ const PendingInvoices = () => {
   const [loading, setLoading] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+  useEffect(() => {
+    fetchPendingInvoices();
+  }, []);
 
   const fetchPendingInvoices = async () => {
     setLoading(true);
@@ -23,10 +28,6 @@ const PendingInvoices = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchPendingInvoices();
-  }, []);
 
   // Export as Excel
   const exportToExcel = () => {
@@ -69,8 +70,16 @@ const PendingInvoices = () => {
     doc.save('pending_invoices.pdf');
   };
 
+  const columns = [
+    { field: 'tenant_name', headerName: 'Tenant Name', width: 200 },
+    { field: 'house_name', headerName: 'House Name', width: 200 },
+    { field: 'invoiceTypeName', headerName: 'Invoice Type', width: 150 },
+    { field: 'amountDue', headerName: 'Amount Due', width: 150 },
+    { field: 'period', headerName: 'Period', width: 150, valueGetter: (params) => `${params.row.month} ${params.row.year}` },
+  ];
+
   return (
-    <Container>
+    <Box sx={{ marginTop: '50px', padding: '20px' }}>
       <Typography variant="h4" gutterBottom>
         Pending Invoices
       </Typography>
@@ -94,41 +103,20 @@ const PendingInvoices = () => {
         </Grid>
       </Grid>
 
-      {loading ? (
-        <Typography>Loading...</Typography>
-      ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><Typography variant="h6">Tenant Name</Typography></TableCell>
-                <TableCell><Typography variant="h6">House Name</Typography></TableCell>
-                <TableCell><Typography variant="h6">Invoice Type</Typography></TableCell>
-                <TableCell><Typography variant="h6">Amount Due</Typography></TableCell>
-                <TableCell><Typography variant="h6">Period</Typography></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pendingInvoices.length > 0 ? (
-                pendingInvoices.map((invoice) => (
-                  <TableRow key={invoice.invoiceID}>
-                    <TableCell>{invoice.tenant_name}</TableCell>
-                    <TableCell>{invoice.house_name}</TableCell>
-                    <TableCell>{invoice.invoiceTypeName}</TableCell>
-                    <TableCell>{invoice.amountDue}</TableCell>
-                    <TableCell>{invoice.month} {invoice.year}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5}><Typography>No pending invoices found.</Typography></TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Container>
+      {/* DataGrid for Pending Invoices */}
+      <Box sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={pendingInvoices}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
+          checkboxSelection
+          components={{ Toolbar: GridToolbar }}
+          loading={loading}
+          getRowId={(row) => row.invoiceID}
+        />
+      </Box>
+    </Box>
   );
 };
 
